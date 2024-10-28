@@ -1,4 +1,4 @@
-# Pipeline de synchronisation du GitHub avec le Azure Repo
+# Pipeline pour synchroniser le dépôt GitHub avec Azure DevOps
 trigger:
   branches:
     include:
@@ -8,20 +8,16 @@ pool:
   name: 'Default'  # Utilise l'agent auto-hébergé
 
 steps:
-# Étape 1 : Cloner le dépôt GitHub
-- checkout: none  # Empêche Azure DevOps de faire un checkout par défaut du dépôt Azure DevOps
-
+# Étape 1 : Cloner le dépôt GitHub en mode miroir
 - script: |
-    echo "Synchronisation avec le dépôt GitHub"
-    cd repo
-    git pull origin master
-  displayName: 'Sync GitHub repository'
+    echo "Clonage du dépôt GitHub en miroir"
+    git clone --mirror https://github.com/alois-fleury/TP1-environnement-deploiement-applications.git repo.git
+  displayName: 'Clone GitHub Repository in Mirror Mode'
 
-# Étape 2 : Pousser les changements vers le dépôt Azure DevOps
+# Étape 2 : Pousser les changements vers Azure DevOps
 - script: |
     echo "Poussée des changements vers Azure DevOps"
-    if ! git remote get-url azure > /dev/null 2>&1; then
-      git remote add azure https://aloisfleuryca@dev.azure.com/aloisfleuryca/TP1-8CLD201-Arthur-Alois-Ewen-Osama/_git/TP1-8CLD201-Arthur-Alois-Ewen-Osama
-    fi
-    git push azure master --force
-  displayName: 'Push to Azure DevOps repository'
+    cd repo.git
+    git remote add azure https://aloisfleuryca@dev.azure.com/aloisfleuryca/TP1-8CLD201-Arthur-Alois-Ewen-Osama/_git/TP1-8CLD201-Arthur-Alois-Ewen-Osama
+    git push azure --mirror
+  displayName: 'Push to Azure DevOps Repository'
