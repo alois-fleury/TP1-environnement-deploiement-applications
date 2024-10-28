@@ -20,7 +20,8 @@ steps:
 # Étape 2 : Pousser les changements vers le dépôt Azure DevOps
 - script: |
     echo "Poussée des changements vers Azure DevOps"
-    git remote add azure https://aloisfleuryca@dev.azure.com/aloisfleuryca/TP1-8CLD201-Arthur-Alois-Ewen-Osama/_git/TP1-8CLD201-Arthur-Alois-Ewen-Osama
-    git checkout master
+    if ! git remote get-url azure > /dev/null 2>&1; then
+      git remote add azure https://aloisfleuryca@dev.azure.com/aloisfleuryca/TP1-8CLD201-Arthur-Alois-Ewen-Osama/_git/TP1-8CLD201-Arthur-Alois-Ewen-Osama
+    fi
     git push azure master --force
   displayName: 'Push to Azure DevOps repository'
