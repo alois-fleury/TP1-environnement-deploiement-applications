@@ -1,21 +1,25 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# Pipeline de synchronisation du GitHub avec le Azure Repo
 trigger:
-- master
-- project
+  branches:
+    include:
+      - master  # Se déclenche uniquement sur les commits de la branche master
 
-# Utilisation de l'agent auto-hébergé pour faire tourner la pipeline
 pool:
-  name: 'Default'
+  name: 'Default'  # Utilise l'agent auto-hébergé
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+# Étape 1 : Cloner le dépôt GitHub
+- checkout: none  # Empêche Azure DevOps de faire un checkout par défaut du dépôt Azure DevOps
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    echo "Synchronisation avec le dépôt GitHub"
+    cd repo
+    git pull origin master
+    displayName: 'Sync GitHub repository'
+
+# Étape 2 : Pousser les changements vers le dépôt Azure DevOps
+- script: |
+    echo "Poussée des changements vers Azure DevOps"
+    git remote add azure https://aloisfleuryca@dev.azure.com/aloisfleuryca/TP1-8CLD201-Arthur-Alois-Ewen-Osama/_git/TP1-8CLD201-Arthur-Alois-Ewen-Osama
+    git push azure master --force
+  displayName: 'Push to Azure DevOps repository'
