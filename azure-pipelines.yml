@@ -22,5 +22,6 @@ steps:
 # Build et Test avec Gradle
 - script: |
     dir
-    .\gradlew clean build  # Build le projet et exécute les tests
+    dir JAVA_HOME_17_X64_openjdk-17.0.2_windows-x64_bin_zip
+    .\gradlew.bat clean build  # Build le projet et exécute les tests
   displayName: 'Build et Test avec Gradle'
