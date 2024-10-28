@@ -17,8 +17,7 @@ steps:
     jdkArchitectureOption: 'x64'
     jdkSourceOption: 'LocalDirectory'
     jdkFile: '"C:\Users\Allow\Downloads\openjdk-17.0.2_windows-x64_bin.zip"'
-    jdkDestinationDirectory: '"."'
-    cleanDestinationDirectory: true
+    cleanDestinationDirectory: false
 
 # Build et Test avec Gradle
 - script: |
