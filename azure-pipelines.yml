@@ -24,5 +24,4 @@ steps:
 - script: |
     cd .\projet-cloud
     .\gradlew.bat clean build
-    .\gradlew.bat clean test
   displayName: 'Build et Test avec Gradle'
