@@ -8,7 +8,7 @@ trigger:
 - project
 
 pool:
-  vmImage: ubuntu-latest
+  name: 'Default'
 
 steps:
 - script: echo Hello, world!
