@@ -1,33 +1,26 @@
+# Pipeline de build
 trigger:
   branches:
     include:
-      - master  # Déclenche uniquement sur les commits de la branche master
+      - master  # Déclenche la pipeline sur les modifications de la branche principale
 
 pool:
-  name: 'Default'  # Utilise l'agent auto-hébergé
+  name: 'Default'
 
 steps:
-- checkout: none  # Empêche Azure DevOps de faire un checkout par défaut du dépôt Azure DevOps
+- checkout: self  # Cloner le dépôt GitHub
 
+# Installer JDK (nécessaire pour Gradle)
+- task: JavaToolInstaller@1
+  inputs:
+    versionSpec: '17'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'LocalDirectory'
+    jdkFile: '"C:\Users\Allow\Downloads\openjdk-17.0.2_windows-x64_bin.zip"'
+    jdkDestinationDirectory: '"C:\Users\Allow\Downloads\openjdk-17.0.2_windows-x64_bin"'
+    cleanDestinationDirectory: true
+
+# Build et Test avec Gradle
 - script: |
-    # Définir le répertoire de clonage
-    REPO_DIR="repo"  # Changez si besoin
-
-    echo "Clonage ou mise à jour du dépôt GitHub"
-    if [ -d "$REPO_DIR" ]; then
-      echo "Dépôt déjà cloné, mise à jour avec git pull"
-      cd "$REPO_DIR"
-      git pull origin master
-    else
-      echo "Clonage du dépôt GitHub"
-      git clone https://github.com/alois-fleury/TP1-environnement-deploiement-applications.git "$REPO_DIR"
-      cd "$REPO_DIR"
-      git checkout master
-    fi
-  displayName: 'Synchroniser le dépôt GitHub'
-
-- script: |
-    echo "Ajout et synchronisation avec le dépôt Azure DevOps"
-    git remote add azure https://dev.azure.com/your-organization/your-project/_git/your-repo
-    git push azure master --force
-  displayName: 'Push vers le dépôt Azure DevOps'
+    ./gradlew clean build  # Build le projet et exécute les tests
+  displayName: 'Build et Test avec Gradle'
