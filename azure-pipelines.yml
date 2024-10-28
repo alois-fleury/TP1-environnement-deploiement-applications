@@ -23,5 +23,5 @@ steps:
 # Build et Test avec Gradle
 - script: |
     cd .\projet-cloud
-    .\gradlew.bat  # Build le projet et exécute les tests
+    .\gradlew.bat
   displayName: 'Build et Test avec Gradle'
