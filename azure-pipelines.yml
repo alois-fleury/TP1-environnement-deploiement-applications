@@ -17,11 +17,9 @@ steps:
     jdkArchitectureOption: 'x64'
     jdkSourceOption: 'LocalDirectory'
     jdkFile: '"C:\Users\Allow\Downloads\openjdk-17.0.2_windows-x64_bin.zip"'
-    cleanDestinationDirectory: false
+    cleanDestinationDirectory: true
 
 # Build et Test avec Gradle
 - script: |
-    dir
-    dir JAVA_HOME_17_X64_openjdk-17.0.2_windows-x64_bin_zip
-    .\gradlew.bat clean build  # Build le projet et exécute les tests
+    .\projet-cloud\gradlew.bat clean build  # Build le projet et exécute les tests
   displayName: 'Build et Test avec Gradle'
