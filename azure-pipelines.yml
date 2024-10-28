@@ -7,6 +7,7 @@ trigger:
 - master
 - project
 
+# Utilisation de l'agent auto-hébergé pour faire tourner la pipeline
 pool:
   name: 'Default'
 
