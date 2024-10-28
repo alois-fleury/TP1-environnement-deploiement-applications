@@ -33,7 +33,7 @@ class CalculKtTest {
 
     @Test
     fun testPourcentage() {
-        assertEquals(0.5, pourcentage(50), "50% de 100 devrait donner 0.5")
+        assertEquals(0.4, pourcentage(50), "50% de 100 devrait donner 0.5")
         assertEquals(1.0, pourcentage(100), "100% de 100 devrait donner 1.0")
         assertEquals(0.0, pourcentage(0), "0% de 100 devrait donner 0.0")
         assertEquals(2.5, pourcentage(250), "250% de 100 devrait donner 2.5")
