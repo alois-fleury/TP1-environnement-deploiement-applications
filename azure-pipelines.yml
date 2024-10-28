@@ -22,5 +22,6 @@ steps:
 
 # Build et Test avec Gradle
 - script: |
+    ls
     .\gradlew clean build  # Build le projet et exécute les tests
   displayName: 'Build et Test avec Gradle'
