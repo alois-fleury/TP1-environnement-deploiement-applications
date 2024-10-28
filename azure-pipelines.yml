@@ -18,6 +18,6 @@ steps:
 - script: |
     echo "Poussée des changements vers Azure DevOps"
     cd repo.git
-    git remote add azure https://aloisfleuryca@dev.azure.com/aloisfleuryca/TP1-8CLD201-Arthur-Alois-Ewen-Osama/_git/TP1-8CLD201-Arthur-Alois-Ewen-Osama
+    git remote add azure https://aloisfleuryca:$(PATGit)@dev.azure.com/aloisfleuryca/TP1-8CLD201-Arthur-Alois-Ewen-Osama/_git/TP1-8CLD201-Arthur-Alois-Ewen-Osama
     git push azure master --force  # Pousse uniquement la branche master
   displayName: 'Push to Azure DevOps Repository'
