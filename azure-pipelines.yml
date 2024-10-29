@@ -5,7 +5,7 @@ trigger:
       - master  # Déclenche la pipeline sur les modifications de la branche principale
 
 pool:
-  name: 'Default'
+  name: 'Default' # Utilisation de l'agent auto-hébergé
 
 steps:
 - checkout: self  # Cloner le dépôt GitHub
