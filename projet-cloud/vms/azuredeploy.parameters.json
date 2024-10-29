@@ -1,0 +1,160 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "eastus"
+    },
+    "osDiskType": {
+      "value": "StandardSSD_LRS"
+    },
+    "addressPrefixes": {
+      "value": [
+        "10.0.0.0/16"
+      ]
+    },
+    "subnets": {
+      "value": [
+        {
+          "name": "default",
+          "properties": {
+            "addressPrefix": "10.0.0.0/20"
+          }
+        }
+      ]
+    },
+    "virtualNetworkId": {
+      "value": "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/TP1/providers/Microsoft.Network/virtualNetworks/TP1-vnet"
+    },
+    "virtualNetworkName": {
+      "value": "TP1-vnet"
+    },
+    "networkSecurityGroups": {
+      "value": [
+        {
+          "name": "basicNsgTP1-vnet-nic01",
+          "id": "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/TP1/providers/Microsoft.Network/networkSecurityGroups/basicNsgTP1-vnet-nic01",
+          "rules": [
+            {
+              "name": "Tcp",
+              "properties": {
+                "priority": 300,
+                "protocol": "Tcp",
+                "access": "Allow",
+                "direction": "Inbound",
+                "sourceAddressPrefix": "*",
+                "sourcePortRange": "*",
+                "destinationAddressPrefix": "*",
+                "destinationPortRange": "80"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "networkInterfaceConfigurations": {
+      "value": [
+        {
+          "name": "TP1-vnet-nic01",
+          "primary": true,
+          "subnetId": "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/TP1/providers/Microsoft.Network/virtualNetworks/TP1-vnet/subnets/default",
+          "applicationGatewayBackendAddressPools": [],
+          "loadBalancerBackendAddressPools": [
+            {
+              "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancerName'), parameters('backendPoolName'))]"
+            }
+          ],
+          "applicationSecurityGroups": [],
+          "loadBalancerInboundNatPools": [],
+          "enableAcceleratedNetworking": false,
+          "nsgName": "basicNsgTP1-vnet-nic01",
+          "nsgId": "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/TP1/providers/Microsoft.Network/networkSecurityGroups/basicNsgTP1-vnet-nic01",
+          "pipName": "publicIp-TP1-vnet-nic01"
+        }
+      ]
+    },
+    "backendPoolName": {
+      "value": "bepool"
+    },
+    "loadBalancerName": {
+      "value": "alb"
+    },
+    "loadbalancingRuleFrontEndPort": {
+      "value": 80
+    },
+    "loadbalancingRuleBackendEndPort": {
+      "value": 80
+    },
+    "loadbalancingRuleProtocol": {
+      "value": "Tcp"
+    },
+    "InboundNATRuleFrontEndPortRangeStart": {
+      "value": 50000
+    },
+    "vmName": {
+      "value": "VMss1"
+    },
+    "virtualMachineScaleSetName": {
+      "value": "VMss1"
+    },
+    "instanceCount": {
+      "value": "2"
+    },
+    "instanceSize": {
+      "value": "Standard_DC1s_v2"
+    },
+    "platformFaultDomainCount": {
+      "value": "1"
+    },
+    "scaleInPolicy": {
+      "value": {
+        "rules": [
+          "Default"
+        ],
+        "forceDeletion": false
+      }
+    },
+    "upgradePolicy": {
+      "value": "Manual"
+    },
+    "hibernationEnabled": {
+      "value": false
+    },
+    "adminUsername": {
+      "value": "vmadmin"
+    },
+    "adminPassword": {
+      "value": null
+    },
+    "customData": {
+      "value": null
+    },
+    "securityType": {
+      "value": "TrustedLaunch"
+    },
+    "secureBoot": {
+      "value": true
+    },
+    "vTPM": {
+      "value": true
+    },
+    "healthExtensionProtocol": {
+      "value": "http"
+    },
+    "healthExtensionPort": {
+      "value": 80
+    },
+    "healthExtensionRequestPath": {
+      "value": "/"
+    },
+    "autoRepairsPolicyEnabled": {
+      "value": false
+    },
+    "gracePeriod": {
+      "value": "PT10M"
+    },
+    "autoRepairsAction": {
+      "value": "Replace"
+    }
+  }
+}
