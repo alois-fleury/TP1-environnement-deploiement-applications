@@ -1,18 +1,27 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# Pipeline de build
 trigger:
-- master
+  branches:
+    include:
+      - master  # Déclenche la pipeline sur les modifications de la branche principale
 
-pool: "Default"
+pool:
+  name: 'Default' # Utilisation de l'agent auto-hébergé
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- checkout: self  # Cloner le dépôt GitHub
 
+# Installer JDK (nécessaire pour Gradle)
+- task: JavaToolInstaller@1
+  inputs:
+    versionSpec: '17'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'LocalDirectory'
+    jdkFile: '"C:\Users\Allow\Downloads\openjdk-17.0.2_windows-x64_bin.zip"'
+    jdkDestinationDirectory: '"C:\Users\Allow\Downloads\openjdk-17.0.2_windows-x64_bin"'
+    cleanDestinationDirectory: true
+
+# Build et Test avec Gradle
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    cd .\projet-cloud
+    .\gradlew.bat clean build
+  displayName: 'Build et Test avec Gradle'
