@@ -1,0 +1,48 @@
+# Pipeline de déploiement
+trigger:
+  branches:
+    include:
+      - master  # Déclenche le pipeline sur les modifications de la branche principale
+
+pool:
+  vmImage: 'windows-latest'  # Utilisez un agent hébergé par Microsoft pour le déploiement
+
+steps:
+# Connexion à Azure
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: '<Nom de votre Service Connection>'  # Service Connection Azure DevOps
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      # Vous connecter à votre compte Azure
+      az account show
+
+# Déployer les ressources avec un modèle ARM
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    azureSubscription: '<Nom de votre Service Connection>'
+    resourceGroupName: '<Nom du Groupe de Ressources>'
+    location: '<Région (ex: East US)>'
+    csmFile: '$(System.DefaultWorkingDirectory)/chemin/vers/votre-fichier-template.json'  # Chemin vers le fichier ARM dans le dépôt
+    overrideParameters: '-name $(nomDeLaRessource)'  # Optionnel : passez des paramètres personnalisés au modèle
+    deploymentMode: 'Incremental'  # Utilisez 'Incremental' pour éviter de recréer les ressources existantes
+
+# (Optionnel) Configurer des règles de mise à l’échelle automatique
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: '<Nom de votre Service Connection>'
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      # Configurer des règles de mise à l’échelle pour les VM (exemple simplifié)
+      az monitor autoscale rule create \
+        --resource-group <Nom du Groupe de Ressources> \
+        --autoscale-name <Nom de l'AutoScale Setting> \
+        --scale out \
+        --metric-name 'Percentage CPU' \
+        --operator 'GreaterThan' \
+        --threshold 50 \
+        --cooldown 5 \
+        --timegrain 'PT1M'
+
