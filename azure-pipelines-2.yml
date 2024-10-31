@@ -2,7 +2,27 @@
 trigger:
   branches:
     include:
-      - master
+      - master  # Déclenche le pipeline sur les modifications de la branche principale
 
 pool:
-  vmImage: 'windows-latest'
+  name: 'Default'  # Utilise le pool d'agents auto-hébergé
+
+steps:
+# Connexion à Azure
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'pipeline-service-connection'  # Nom de la connexion de service que vous avez configurée
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      # Cette commande montre l'abonnement Azure actuel pour confirmer la connexion
+      az account show
+
+# Déployer les ressources avec un modèle ARM
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    azureSubscription: 'pipeline-service-connection'
+    resourceGroupName: 'TP1'  # Nom de votre groupe de ressources
+    location: 'East US'  # Région de déploiement (à ajuster si nécessaire)
+    csmFile: '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json'  # Chemin vers le fichier ARM Template
+    deploymentMode: 'Incremental'  # Utiliser 'Incremental' pour éviter de recréer les ressources existantes
