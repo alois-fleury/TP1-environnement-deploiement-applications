@@ -10,7 +10,7 @@ pool:
 steps:
 - checkout: self  # Cloner le dépôt
 
-# Étape 1 : Télécharger et installer Azure CLI via MSI
+# Étape 1 : Télécharger et installer Azure CLI via MSI sur un agent Windows
 - task: PowerShell@2
   displayName: 'Télécharger et installer Azure CLI via MSI'
   inputs:
@@ -47,40 +47,35 @@ steps:
           Write-Output "Azure CLI est déjà installé."
       }
 
-# Étape 2 : Vérifier Azure CLI avec chemin complet
+# Étape 2 : Vérifiez qu'Azure CLI fonctionne en utilisant le chemin complet vers 'az'
 - task: PowerShell@2
   displayName: 'Vérifier Azure CLI avec chemin complet'
   inputs:
     targetType: 'inline'
     script: |
-      "Vérification de la version Azure CLI"
+      Write-Output "Vérification de la version Azure CLI"
       & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' --version
 
-# Étape 3 : Connexion à Azure avec CLI et variables d'environnement
+# Étape 3 : Connexion à Azure via PowerShell personnalisé avec chemin complet
 - task: PowerShell@2
   displayName: 'Connexion à Azure via Azure CLI avec chemin complet'
   inputs:
     targetType: 'inline'
     script: |
-      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' login --service-principal -u "$(AZURE_CLIENT_ID)" -p "$(AZURE_CLIENT_SECRET)" --tenant "$(AZURE_TENANT_ID)"
-      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' account set --subscription "$(AZURE_SUBSCRIPTION_ID)"
+      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID)
+      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' account set --subscription $(AZURE_SUBSCRIPTION_ID)
 
-# Étape 4 : Déploiement ARM avec Azure CLI
+# Étape 4 : Déployer les ressources avec un modèle ARM (via chemin complet pour Azure CLI)
 - task: PowerShell@2
   displayName: 'Déploiement ARM avec Azure CLI et chemin complet'
   inputs:
     targetType: 'inline'
     script: |
-      # Préparation des paramètres
-      $location = "East US"
-      $osDiskType = "Standard_LRS"
-      $instanceCount = 2
-      $loadBalancerName = "myLoadBalancer"
-      $backendPoolName = "myBackendPool"
-      $virtualMachineScaleSetName = "myVMSS"
-      $vmName = "myVM"
-      $adminUsername = "$(adminUsername)"
-      $adminPassword = "$(adminPassword)"
-
-      # Exécution du déploiement ARM avec les paramètres
-      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' deployment group create --resource-group 'TP1' --template-file '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json' --parameters location=$location osDiskType=$osDiskType instanceCount=$instanceCount loadBalancerName=$loadBalancerName backendPoolName=$backendPoolName virtualMachineScaleSetName=$virtualMachineScaleSetName vmName=$vmName adminUsername=$adminUsername adminPassword=$adminPassword
+      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' deployment group create `
+        --resource-group 'TP1' `
+        --template-file '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json' `
+        --parameters `
+          adminUsername="azureAdmin" `
+          adminPassword="$(adminPassword)" `
+          virtualMachineScaleSetName="myVMSS" `
+          vmName="myVM"
