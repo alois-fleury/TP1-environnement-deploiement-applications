@@ -2,107 +2,42 @@
 trigger:
   branches:
     include:
-      - master  # Déclenche la pipeline sur les modifications de la branche principale
+      - master  # Déclenche le pipeline sur les modifications de la branche principale
 
 pool:
   name: 'Default'  # Utilisation de l'agent auto-hébergé
 
 variables:
-  - group: adminVM  # Utilise le groupe de variables adminVM pour injecter adminUsername et adminPassword
+  AdminPass: $(AdminPass)  # Utilisation de la variable AdminPass déjà configurée
 
 steps:
 - checkout: self  # Cloner le dépôt
 
-# Étape 1 : Télécharger et installer Azure CLI via MSI sur un agent Windows
+# Étape 1 : Encoder le contenu de cloud-init.txt en base64
 - task: PowerShell@2
-  displayName: 'Télécharger et installer Azure CLI via MSI'
+  displayName: "Encoder le contenu Cloud-Init"
   inputs:
     targetType: 'inline'
     script: |
-      if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
-          Write-Output "Azure CLI non trouvé. Téléchargement et installation via MSI..."
-          Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile AzureCLI.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet /norestart'
-          Write-Output "Azure CLI installé avec succès."
-          $env:PATH += ";C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin"
-      } else {
-          Write-Output "Azure CLI est déjà installé."
-      }
+      # Lire le contenu du fichier cloud-init.txt
+      $cloudContent = Get-Content -Path "$(Build.SourcesDirectory)\projet-cloud\vms\cloud-init.txt" -Raw
+      # Encoder en base64
+      $encodedContent = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($cloudContent))
+      # Définir la variable CloudIniContent pour l'étape suivante
+      Write-Host "##vso[task.setvariable variable=CloudIniContent;]$encodedContent"
 
-# Étape 2 : Vérifier Azure CLI
-- task: PowerShell@2
-  displayName: 'Vérifier Azure CLI avec chemin complet'
+# Étape 2 : Déploiement ARM avec la variable AdminPass et CloudIniContent
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: "Déployer le modèle ARM avec paramètres"
   inputs:
-    targetType: 'inline'
-    script: |
-      Write-Output "Vérification de la version Azure CLI"
-      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' --version
-
-# Étape 3 : Connexion à Azure via Azure CLI
-- task: PowerShell@2
-  displayName: 'Connexion à Azure via Azure CLI avec chemin complet'
-  inputs:
-    targetType: 'inline'
-    script: |
-      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID)
-      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' account set --subscription $(AZURE_SUBSCRIPTION_ID)
-
-# Étape 4 : Lister les fichiers dans projet-cloud/vms pour vérifier la présence des fichiers ARM
-- task: PowerShell@2
-  displayName: 'Lister les fichiers dans projet-cloud/vms'
-  inputs:
-    targetType: 'inline'
-    script: |
-      Write-Output "Contenu du répertoire $(System.DefaultWorkingDirectory)\projet-cloud\vms :"
-      Get-ChildItem -Path "$(System.DefaultWorkingDirectory)\projet-cloud\vms" -Recurse
-
-# Étape 5 : Déployer le modèle ARM
-- task: PowerShell@2
-  displayName: 'Déploiement ARM avec Azure CLI et chemin complet'
-  inputs:
-    targetType: 'inline'
-    script: |
-      # Définir les chemins complets des fichiers
-      $templateFile = "$(System.DefaultWorkingDirectory)\projet-cloud\vms\azuredeploy.json"
-      $parametersFile = "$(System.DefaultWorkingDirectory)\projet-cloud\vms\azuredeploy.parameters.json"
-
-      # Vérifier l'existence du fichier de modèle
-      if (Test-Path -Path $templateFile) {
-          Write-Output "Fichier de modèle ARM trouvé : $templateFile"
-      } else {
-          Write-Output "Erreur : Fichier de modèle ARM introuvable : $templateFile"
-          exit 1
-      }
-
-      # Vérifier l'existence du fichier de paramètres
-      if (Test-Path -Path $parametersFile) {
-          Write-Output "Fichier de paramètres ARM trouvé : $parametersFile"
-      } else {
-          Write-Output "Erreur : Fichier de paramètres ARM introuvable : $parametersFile"
-          exit 1
-      }
-
-      # Afficher les fichiers pour confirmer leur contenu
-      Write-Output "Contenu de $templateFile :"
-      Get-Content $templateFile
-      Write-Output "Contenu de $parametersFile :"
-      Get-Content $parametersFile
-
-      # Exécuter la commande de déploiement ARM avec un chemin PowerShell explicite pour chaque argument
-      Write-Output "Exécution de la commande de déploiement ARM..."
-      try {
-        & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' deployment group create `
-          --resource-group "TP1" `
-          --template-file "$templateFile" `
-          --parameters "@$parametersFile" `
-          --parameters adminUsername="azureAdmin" `
-          --parameters adminPassword="$(adminPassword)" `
-          --parameters virtualMachineScaleSetName="myVMSS" `
-          --parameters vmName="myVM" `
-          --verbose `
-          --debug
-      } catch {
-        Write-Output "Erreur pendant l'exécution de la commande de déploiement ARM"
-        Write-Output $_
-        exit 1
-      }
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'  # Remplacez par votre connexion Azure DevOps
+    subscriptionId: '40e22e55-8ff0-4611-b9d0-4a8db29b3460'  # Remplacez par votre ID de souscription
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'TP1'
+    location: 'East US'
+    templateLocation: 'Linked artifact'
+    csmFile: '$(Build.SourcesDirectory)\projet-cloud\vms\azuredeploy.json'
+    csmParametersFile: '$(Build.SourcesDirectory)\projet-cloud\vms\azuredeploy.parameters.json'
+    overrideParameters: '-customData "$(CloudIniContent)" -adminPassword "$(AdminPass)"'
+    deploymentMode: 'Incremental'
