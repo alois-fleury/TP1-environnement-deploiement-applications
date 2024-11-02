@@ -1,4 +1,4 @@
-# Pipeline de déploiement pour Azure
+# Pipeline de déploiement pour Azure avec installation automatique d'Azure CLI
 trigger:
   branches:
     include:
@@ -8,10 +8,24 @@ pool:
   name: 'Default'  # Utilise le pool d'agents auto-hébergé
 
 steps:
+# Étape pour installer Azure CLI
+- task: Bash@3
+  displayName: 'Installer Azure CLI'
+  inputs:
+    targetType: 'inline'
+    script: |
+      if ! command -v az &> /dev/null
+      then
+          echo "Azure CLI non trouvé. Installation..."
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+      else
+          echo "Azure CLI est déjà installé."
+      fi
+
 # Connexion à Azure
 - task: AzureCLI@2
   inputs:
-    azureSubscription: 'pipeline-service-connection'  # Nom de la connexion de service que vous avez configurée
+    azureSubscription: 'pipeline-service-connection'  # Nom de la connexion de service configurée
     scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
@@ -23,6 +37,6 @@ steps:
   inputs:
     azureSubscription: 'pipeline-service-connection'
     resourceGroupName: 'TP1'  # Nom de votre groupe de ressources
-    location: 'East US'  # Région de déploiement (à ajuster si nécessaire)
+    location: 'East US'  # Région de déploiement
     csmFile: '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json'  # Chemin vers le fichier ARM Template
     deploymentMode: 'Incremental'  # Utiliser 'Incremental' pour éviter de recréer les ressources existantes
