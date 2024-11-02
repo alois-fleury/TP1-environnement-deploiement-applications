@@ -1,4 +1,4 @@
-# Pipeline de déploiement pour Azure avec vérification du téléchargement d'Azure CLI
+# Pipeline de déploiement pour Azure avec téléchargement et configuration d'Azure CLI avec `tar`
 trigger:
   branches:
     include:
@@ -10,7 +10,7 @@ pool:
 steps:
 - checkout: self  # Cloner le dépôt
 
-# Télécharger et Configurer Azure CLI avec vérification du fichier ZIP
+# Télécharger et Configurer Azure CLI avec `tar` pour éviter les erreurs d'extraction
 - task: PowerShell@2
   displayName: 'Télécharger et configurer Azure CLI'
   inputs:
@@ -34,17 +34,18 @@ steps:
               exit 1
           }
 
-          # Créer un dossier pour l'extraction et essayer d'extraire le fichier ZIP
-          try {
-              Expand-Archive -Path AzureCLI.zip -DestinationPath "$env:USERPROFILE\AzureCLI" -Force
-              Write-Output "Azure CLI téléchargé et extrait avec succès."
-          } catch {
-              Write-Output "Erreur lors de l'extraction d'Azure CLI. Arrêt du pipeline."
-              exit 1
+          # Créer un dossier pour l'extraction
+          $cliExtractPath = "$env:USERPROFILE\AzureCLI"
+          if (!(Test-Path -Path $cliExtractPath)) {
+              New-Item -ItemType Directory -Path $cliExtractPath
           }
 
+          # Extraire le fichier ZIP avec `tar` pour éviter les erreurs de compatibilité
+          tar -xf AzureCLI.zip -C $cliExtractPath
+          Write-Output "Azure CLI téléchargé et extrait avec succès."
+
           # Ajouter Azure CLI au PATH pour la session en cours
-          $env:PATH += ";$env:USERPROFILE\AzureCLI"
+          $env:PATH += ";$cliExtractPath"
 
           # Vérifier si l'installation fonctionne
           az --version
