@@ -1,4 +1,4 @@
-# Pipeline de déploiement pour Azure avec téléchargement et configuration d'Azure CLI avec `tar`
+# Pipeline de déploiement pour Azure avec installation de l’Azure CLI via MSI
 trigger:
   branches:
     include:
@@ -10,48 +10,36 @@ pool:
 steps:
 - checkout: self  # Cloner le dépôt
 
-# Télécharger et Configurer Azure CLI avec `tar` pour éviter les erreurs d'extraction
+# Télécharger et Installer Azure CLI via MSI sur un agent Windows
 - task: PowerShell@2
-  displayName: 'Télécharger et configurer Azure CLI'
+  displayName: 'Télécharger et installer Azure CLI via MSI'
   inputs:
     targetType: 'inline'
     script: |
-      # Vérifier si Azure CLI est déjà disponible
+      # Vérifier si Azure CLI est déjà installé
       if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
-          Write-Output "Azure CLI non trouvé. Téléchargement et configuration..."
+          Write-Output "Azure CLI non trouvé. Téléchargement et installation via MSI..."
 
-          # Supprime le fichier ZIP s'il existe déjà
-          if (Test-Path -Path AzureCLI.zip) {
-              Remove-Item -Force AzureCLI.zip
+          # Supprime le fichier MSI s'il existe déjà
+          if (Test-Path -Path AzureCLI.msi) {
+              Remove-Item -Force AzureCLI.msi
           }
 
-          # Télécharge le fichier ZIP d'Azure CLI pour Windows
-          Invoke-WebRequest -Uri https://aka.ms/InstallAzureCliWindowsZip -OutFile AzureCLI.zip
+          # Télécharge le fichier MSI d'installation d'Azure CLI
+          Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile AzureCLI.msi
 
-          # Vérification de la validité du fichier ZIP
-          if (!(Test-Path -Path AzureCLI.zip) -or ((Get-Item AzureCLI.zip).length -eq 0)) {
-              Write-Output "Échec du téléchargement d'Azure CLI. Arrêt du pipeline."
+          # Vérification de la validité du fichier MSI
+          if (!(Test-Path -Path AzureCLI.msi) -or ((Get-Item AzureCLI.msi).length -eq 0)) {
+              Write-Output "Échec du téléchargement de l'Azure CLI. Arrêt du pipeline."
               exit 1
           }
 
-          # Créer un dossier pour l'extraction
-          $cliExtractPath = "$env:USERPROFILE\AzureCLI"
-          if (!(Test-Path -Path $cliExtractPath)) {
-              New-Item -ItemType Directory -Path $cliExtractPath
-          }
+          # Installation silencieuse du MSI
+          Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet /norestart'
+          Write-Output "Azure CLI installé avec succès."
 
-          # Extraire le fichier ZIP avec `tar` pour éviter les erreurs de compatibilité
-          tar -xf AzureCLI.zip -C $cliExtractPath
-          Write-Output "Azure CLI téléchargé et extrait avec succès."
-
-          # Ajouter Azure CLI au PATH pour la session en cours
-          $env:PATH += ";$cliExtractPath"
-
-          # Vérifier si l'installation fonctionne
-          az --version
-          
-          # Supprimer le fichier ZIP
-          Remove-Item -Force AzureCLI.zip
+          # Supprimer le fichier MSI après installation
+          Remove-Item -Force AzureCLI.msi
       } else {
           Write-Output "Azure CLI est déjà installé."
       }
