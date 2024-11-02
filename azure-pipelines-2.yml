@@ -13,6 +13,15 @@ variables:
 steps:
 - checkout: self  # Cloner le dépôt
 
+# Étape de diagnostic pour lister les fichiers dans $(System.DefaultWorkingDirectory)
+- task: PowerShell@2
+  displayName: 'Lister les fichiers dans le répertoire de travail'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Output "Fichiers dans le répertoire de travail : $(System.DefaultWorkingDirectory)"
+      Get-ChildItem -Recurse $(System.DefaultWorkingDirectory)
+
 # Étape 1 : Télécharger et installer Azure CLI via MSI sur un agent Windows
 - task: PowerShell@2
   displayName: 'Télécharger et installer Azure CLI via MSI'
@@ -74,9 +83,19 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      # Définit le chemin vers le fichier de modèle ARM
+      $templateFile = "$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json"
+      if (Test-Path -Path $templateFile) {
+          Write-Output "Fichier de modèle ARM trouvé : $templateFile"
+      } else {
+          Write-Output "Fichier de modèle ARM introuvable : $templateFile"
+          exit 1
+      }
+
+      # Exécutez la commande de déploiement si le fichier est trouvé
       & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' deployment group create `
         --resource-group 'TP1' `
-        --template-file '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json' `
+        --template-file $templateFile `
         --parameters `
           adminUsername="$(adminUsername)" `
           adminPassword="$(adminPassword)" `
