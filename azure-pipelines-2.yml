@@ -1,4 +1,4 @@
-# Pipeline de déploiement ARM
+# Pipeline de déploiement ARM avec PowerShell Az
 trigger:
   branches:
     include:
@@ -13,41 +13,28 @@ variables:
 steps:
 - checkout: self  # Cloner le dépôt
 
-# Étape 1 : Télécharger et installer Azure CLI via MSI sur un agent Windows
+# Étape 1 : Installer le module Az si non présent
 - task: PowerShell@2
-  displayName: 'Télécharger et installer Azure CLI via MSI'
+  displayName: 'Installer le module PowerShell Az'
   inputs:
     targetType: 'inline'
     script: |
-      if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
-          Write-Output "Azure CLI non trouvé. Téléchargement et installation via MSI..."
-          Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile AzureCLI.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet /norestart'
-          Write-Output "Azure CLI installé avec succès."
-          $env:PATH += ";C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin"
-      } else {
-          Write-Output "Azure CLI est déjà installé."
+      if (-not (Get-Module -ListAvailable -Name Az)) {
+          Install-Module -Name Az -AllowClobber -Scope CurrentUser -Force
       }
+      Import-Module Az
+      Write-Output "Module Az installé et importé."
 
-# Étape 2 : Vérifier Azure CLI
+# Étape 2 : Connexion à Azure
 - task: PowerShell@2
-  displayName: 'Vérifier Azure CLI avec chemin complet'
+  displayName: 'Connexion à Azure avec PowerShell Az'
   inputs:
     targetType: 'inline'
     script: |
-      Write-Output "Vérification de la version Azure CLI"
-      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' --version
+      Connect-AzAccount -ServicePrincipal -TenantId $(AZURE_TENANT_ID) -Credential (New-Object System.Management.Automation.PSCredential -ArgumentList $(AZURE_CLIENT_ID), (ConvertTo-SecureString -String $(AZURE_CLIENT_SECRET) -AsPlainText -Force))
+      Set-AzContext -SubscriptionId $(AZURE_SUBSCRIPTION_ID)
 
-# Étape 3 : Connexion à Azure via Azure CLI
-- task: PowerShell@2
-  displayName: 'Connexion à Azure via Azure CLI avec chemin complet'
-  inputs:
-    targetType: 'inline'
-    script: |
-      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID)
-      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' account set --subscription $(AZURE_SUBSCRIPTION_ID)
-
-# Étape 4 : Lister les fichiers dans projet-cloud/vms pour vérifier la présence des fichiers ARM
+# Étape 3 : Lister les fichiers dans projet-cloud/vms pour vérifier la présence des fichiers ARM
 - task: PowerShell@2
   displayName: 'Lister les fichiers dans projet-cloud/vms'
   inputs:
@@ -56,9 +43,9 @@ steps:
       Write-Output "Contenu du répertoire $(System.DefaultWorkingDirectory)\projet-cloud\vms :"
       Get-ChildItem -Path "$(System.DefaultWorkingDirectory)\projet-cloud\vms" -Recurse
 
-# Étape 5 : Déployer le modèle ARM avec détails d'erreur
+# Étape 4 : Déployer le modèle ARM avec PowerShell Az
 - task: PowerShell@2
-  displayName: 'Déploiement ARM avec Azure CLI et chemin complet'
+  displayName: 'Déploiement ARM avec PowerShell Az'
   inputs:
     targetType: 'inline'
     script: |
@@ -82,27 +69,27 @@ steps:
           exit 1
       }
 
-      # Afficher les fichiers pour confirmer leur contenu
-      Write-Output "Contenu de $templateFile :"
-      Get-Content $templateFile
-      Write-Output "Contenu de $parametersFile :"
-      Get-Content $parametersFile
+      # Lire et préparer les paramètres
+      $parameters = @{
+          adminUsername = "azureAdmin"
+          adminPassword = $(adminPassword)  # Assurez-vous que le mot de passe est stocké de manière sécurisée
+          virtualMachineScaleSetName = "myVMSS"
+          vmName = "myVM"
+      }
 
-      # Exécuter la commande de déploiement ARM avec un chemin PowerShell explicite pour chaque argument
-      Write-Output "Exécution de la commande de déploiement ARM..."
+      # Exécution de la commande de déploiement ARM avec New-AzResourceGroupDeployment
+      Write-Output "Début du déploiement ARM..."
       try {
-        & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' deployment group create `
-          --resource-group "TP1" `
-          --template-file "$templateFile" `
-          --parameters "@$parametersFile" `
-          adminUsername="azureAdmin" `
-          adminPassword="$(adminPassword)" `
-          virtualMachineScaleSetName="myVMSS" `
-          vmName="myVM" `
-          --verbose `
-          --debug
+          New-AzResourceGroupDeployment -ResourceGroupName "TP1" `
+                                        -TemplateFile $templateFile `
+                                        -TemplateParameterFile $parametersFile `
+                                        -adminUsername $parameters.adminUsername `
+                                        -adminPassword (ConvertTo-SecureString -String $parameters.adminPassword -AsPlainText -Force) `
+                                        -virtualMachineScaleSetName $parameters.virtualMachineScaleSetName `
+                                        -vmName $parameters.vmName `
+                                        -Verbose
       } catch {
-        Write-Output "Erreur pendant l'exécution de la commande de déploiement ARM"
-        Write-Output $_
-        exit 1
+          Write-Output "Erreur pendant le déploiement ARM :"
+          Write-Output $_.Exception.Message
+          exit 1
       }
