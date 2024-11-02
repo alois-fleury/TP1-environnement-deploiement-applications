@@ -1,4 +1,4 @@
-# Pipeline de déploiement pour Azure avec vérification du PATH d'Azure CLI
+# Pipeline de déploiement pour Azure avec installation de l’Azure CLI via MSI et configuration du PATH
 trigger:
   branches:
     include:
@@ -47,24 +47,28 @@ steps:
           Write-Output "Azure CLI est déjà installé."
       }
 
-# Vérifiez que la commande `az` est bien disponible dans le PATH
-- script: |
-    az --version
-  displayName: 'Vérifier Azure CLI dans le PATH'
-
-# Connexion à Azure via PowerShell personnalisé
+# Vérifiez qu'Azure CLI fonctionne en utilisant le chemin complet vers 'az'
 - task: PowerShell@2
-  displayName: 'Connexion à Azure via Azure CLI'
+  displayName: 'Vérifier Azure CLI avec chemin complet'
   inputs:
     targetType: 'inline'
     script: |
-      az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID)
-      az account set --subscription $(AZURE_SUBSCRIPTION_ID)
+      "Vérification de la version Azure CLI"
+      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' --version
 
-# Déployer les ressources avec un modèle ARM (via script PowerShell)
+# Connexion à Azure via PowerShell personnalisé avec chemin complet
 - task: PowerShell@2
-  displayName: 'Déploiement ARM avec Azure CLI'
+  displayName: 'Connexion à Azure via Azure CLI avec chemin complet'
   inputs:
     targetType: 'inline'
     script: |
-      az deployment group create --resource-group 'TP1' --template-file '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json' --parameters parameterName=parameterValue
+      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID)
+      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' account set --subscription $(AZURE_SUBSCRIPTION_ID)
+
+# Déployer les ressources avec un modèle ARM (via chemin complet pour Azure CLI)
+- task: PowerShell@2
+  displayName: 'Déploiement ARM avec Azure CLI et chemin complet'
+  inputs:
+    targetType: 'inline'
+    script: |
+      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' deployment group create --resource-group 'TP1' --template-file '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json' --parameters parameterName=parameterValue
