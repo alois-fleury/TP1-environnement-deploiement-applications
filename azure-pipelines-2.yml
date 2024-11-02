@@ -82,11 +82,17 @@ steps:
           exit 1
       }
 
-      # Exécuter la commande de déploiement ARM
+      # Afficher les fichiers pour confirmer leur contenu
+      Write-Output "Contenu de $templateFile :"
+      Get-Content $templateFile
+      Write-Output "Contenu de $parametersFile :"
+      Get-Content $parametersFile
+
+      # Exécuter la commande de déploiement ARM avec un chemin PowerShell explicite pour chaque argument
       & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' deployment group create `
-        --resource-group 'TP1' `
-        --template-file $templateFile `
-        --parameters @$parametersFile `
+        --resource-group "TP1" `
+        --template-file "$templateFile" `
+        --parameters "@$parametersFile" `
         adminUsername="azureAdmin" `
         adminPassword="$(adminPassword)" `
         virtualMachineScaleSetName="myVMSS" `
