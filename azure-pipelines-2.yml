@@ -84,7 +84,7 @@ steps:
     targetType: 'inline'
     script: |
       # Définit le chemin vers le fichier de modèle ARM
-      $templateFile = "$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json"
+      $templateFile = "$(System.DefaultWorkingDirectory)\projet-cloud\vms\azuredeploy.json"
       if (Test-Path -Path $templateFile) {
           Write-Output "Fichier de modèle ARM trouvé : $templateFile"
       } else {
