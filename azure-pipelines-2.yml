@@ -1,4 +1,4 @@
-# Pipeline de déploiement pour Azure avec installation automatique d'Azure CLI (Windows)
+# Pipeline de déploiement pour Azure avec installation d'Azure CLI et JDK
 trigger:
   branches:
     include:
@@ -8,16 +8,40 @@ pool:
   name: 'Default'  # Utilise le pool d'agents auto-hébergé
 
 steps:
-# Étape pour installer Azure CLI sur un agent Windows sans MSI
+- checkout: self  # Cloner le dépôt
+
+# Télécharger et Installer JDK (nécessaire pour Gradle)
+- task: JavaToolInstaller@1
+  inputs:
+    versionSpec: '17'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'LocalDirectory'
+    jdkFile: '"C:\Users\Allow\Downloads\openjdk-17.0.2_windows-x64_bin.zip"'
+    jdkDestinationDirectory: '"C:\Users\Allow\Downloads\openjdk-17.0.2_windows-x64_bin"'
+    cleanDestinationDirectory: true
+
+# Télécharger et Configurer Azure CLI
 - task: PowerShell@2
-  displayName: 'Installer Azure CLI sur Windows'
+  displayName: 'Télécharger et configurer Azure CLI'
   inputs:
     targetType: 'inline'
     script: |
       if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
-          Write-Output "Azure CLI non trouvé. Installation..."
-          # Utilise Invoke-Expression pour exécuter le script d'installation directement
-          Invoke-Expression -Command "& { $(Invoke-RestMethod -Uri https://aka.ms/installazurecliwindows) }"
+          Write-Output "Azure CLI non trouvé. Téléchargement et configuration..."
+          # Télécharge le fichier ZIP d'Azure CLI pour Windows
+          Invoke-WebRequest -Uri https://aka.ms/InstallAzureCliWindowsZip -OutFile AzureCLI.zip
+          
+          # Créer un dossier pour l'extraction et extraire le fichier ZIP
+          Expand-Archive -Path AzureCLI.zip -DestinationPath "$env:USERPROFILE\AzureCLI" -Force
+          
+          # Ajouter Azure CLI au PATH pour la session en cours
+          $env:PATH += ";$env:USERPROFILE\AzureCLI"
+
+          # Vérifier si l'installation fonctionne
+          az --version
+          
+          # Supprimer le fichier ZIP
+          Remove-Item -Force AzureCLI.zip
       } else {
           Write-Output "Azure CLI est déjà installé."
       }
