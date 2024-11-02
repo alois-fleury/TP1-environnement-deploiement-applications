@@ -1,4 +1,4 @@
-# Pipeline de déploiement pour Azure avec installation de l’Azure CLI via MSI
+# Pipeline de déploiement pour Azure avec vérification du PATH d'Azure CLI
 trigger:
   branches:
     include:
@@ -40,25 +40,31 @@ steps:
 
           # Supprimer le fichier MSI après installation
           Remove-Item -Force AzureCLI.msi
+
+          # Ajouter Azure CLI au PATH pour cette session de pipeline
+          $env:PATH += ";C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin"
       } else {
           Write-Output "Azure CLI est déjà installé."
       }
 
-# Connexion à Azure
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'pipeline-service-connection'  # Nom de la connexion de service configurée
-    scriptType: 'ps'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      # Cette commande montre l'abonnement Azure actuel pour confirmer la connexion
-      az account show
+# Vérifiez que la commande `az` est bien disponible dans le PATH
+- script: |
+    az --version
+  displayName: 'Vérifier Azure CLI dans le PATH'
 
-# Déployer les ressources avec un modèle ARM
-- task: AzureResourceManagerTemplateDeployment@3
+# Connexion à Azure via PowerShell personnalisé
+- task: PowerShell@2
+  displayName: 'Connexion à Azure via Azure CLI'
   inputs:
-    azureSubscription: 'pipeline-service-connection'
-    resourceGroupName: 'TP1'  # Nom de votre groupe de ressources
-    location: 'East US'  # Région de déploiement
-    csmFile: '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json'  # Chemin vers le fichier ARM Template
-    deploymentMode: 'Incremental'  # Utiliser 'Incremental' pour éviter de recréer les ressources existantes
+    targetType: 'inline'
+    script: |
+      az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CLIENT_SECRET) --tenant $(AZURE_TENANT_ID)
+      az account set --subscription $(AZURE_SUBSCRIPTION_ID)
+
+# Déployer les ressources avec un modèle ARM (via script PowerShell)
+- task: PowerShell@2
+  displayName: 'Déploiement ARM avec Azure CLI'
+  inputs:
+    targetType: 'inline'
+    script: |
+      az deployment group create --resource-group 'TP1' --template-file '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json' --parameters parameterName=parameterValue
