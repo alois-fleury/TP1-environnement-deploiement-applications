@@ -7,6 +7,9 @@ trigger:
 pool:
   name: 'Default'  # Utilise le pool d'agents auto-hébergé
 
+variables:
+  - group: adminVM  # Utilise le groupe de variables adminVM pour injecter adminUsername et adminPassword
+
 steps:
 - checkout: self  # Cloner le dépôt
 
@@ -47,16 +50,16 @@ steps:
           Write-Output "Azure CLI est déjà installé."
       }
 
-# Étape 2 : Vérifiez qu'Azure CLI fonctionne en utilisant le chemin complet vers 'az'
+# Étape 2 : Vérifier qu'Azure CLI fonctionne en utilisant le chemin complet vers 'az'
 - task: PowerShell@2
   displayName: 'Vérifier Azure CLI avec chemin complet'
   inputs:
     targetType: 'inline'
     script: |
-      Write-Output "Vérification de la version Azure CLI"
+      "Vérification de la version Azure CLI"
       & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' --version
 
-# Étape 3 : Connexion à Azure via PowerShell personnalisé avec chemin complet
+# Étape 3 : Connexion à Azure via Azure CLI avec chemin complet
 - task: PowerShell@2
   displayName: 'Connexion à Azure via Azure CLI avec chemin complet'
   inputs:
@@ -75,7 +78,7 @@ steps:
         --resource-group 'TP1' `
         --template-file '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json' `
         --parameters `
-          adminUsername="azureAdmin" `
-          adminPassword="'$(adminPassword)'" `
+          adminUsername="$(adminUsername)" `
+          adminPassword="$(adminPassword)" `
           virtualMachineScaleSetName="myVMSS" `
           vmName="myVM"
