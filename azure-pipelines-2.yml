@@ -7,9 +7,6 @@ trigger:
 pool:
   name: 'Default'  # Utilisation de l'agent auto-hébergé
 
-variables:
-  AdminPass: $(AdminPass)  # Utilisation de la variable AdminPass déjà configurée
-
 steps:
 - checkout: self  # Cloner le dépôt
 
