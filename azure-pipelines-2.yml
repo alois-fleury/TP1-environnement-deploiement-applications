@@ -71,5 +71,16 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      # Remplacez les valeurs des paramètres ci-dessous par les valeurs nécessaires pour le modèle ARM
-      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' deployment group create --resource-group 'TP1' --template-file '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json' --parameters location="East US" osDiskType="Standard_LRS" instanceCount=2 loadBalancerName="myLoadBalancer" backendPoolName="myBackendPool" virtualMachineScaleSetName="myVMSS" vmName="myVM" adminUsername="$(adminUsername)" adminPassword="$(adminPassword)"
+      # Préparation des paramètres
+      $location = "East US"
+      $osDiskType = "Standard_LRS"
+      $instanceCount = 2
+      $loadBalancerName = "myLoadBalancer"
+      $backendPoolName = "myBackendPool"
+      $virtualMachineScaleSetName = "myVMSS"
+      $vmName = "myVM"
+      $adminUsername = "$(adminUsername)"
+      $adminPassword = "$(adminPassword)"
+
+      # Exécution du déploiement ARM avec les paramètres
+      & 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd' deployment group create --resource-group 'TP1' --template-file '$(System.DefaultWorkingDirectory)/projet-cloud/vms/azuredeploy.json' --parameters location=$location osDiskType=$osDiskType instanceCount=$instanceCount loadBalancerName=$loadBalancerName backendPoolName=$backendPoolName virtualMachineScaleSetName=$virtualMachineScaleSetName vmName=$vmName adminUsername=$adminUsername adminPassword=$adminPassword
