@@ -1,4 +1,4 @@
-# Pipeline de déploiement pour Azure avec installation automatique d'Azure CLI
+# Pipeline de déploiement pour Azure avec installation automatique d'Azure CLI (Windows)
 trigger:
   branches:
     include:
@@ -8,19 +8,20 @@ pool:
   name: 'Default'  # Utilise le pool d'agents auto-hébergé
 
 steps:
-# Étape pour installer Azure CLI
-- task: Bash@3
-  displayName: 'Installer Azure CLI'
+# Étape pour installer Azure CLI sur un agent Windows
+- task: PowerShell@2
+  displayName: 'Installer Azure CLI sur Windows'
   inputs:
     targetType: 'inline'
     script: |
-      if ! command -v az &> /dev/null
-      then
-          echo "Azure CLI non trouvé. Installation..."
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-      else
-          echo "Azure CLI est déjà installé."
-      fi
+      if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
+          Write-Output "Azure CLI non trouvé. Installation..."
+          Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile AzureCLI.msi
+          Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'
+          Remove-Item -Force AzureCLI.msi
+      } else {
+          Write-Output "Azure CLI est déjà installé."
+      }
 
 # Connexion à Azure
 - task: AzureCLI@2
