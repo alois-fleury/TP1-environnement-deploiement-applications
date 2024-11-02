@@ -8,7 +8,7 @@ pool:
   name: 'Default'  # Utilise le pool d'agents auto-hébergé
 
 steps:
-# Étape pour installer Azure CLI sur un agent Windows
+# Étape pour installer Azure CLI sur un agent Windows sans MSI
 - task: PowerShell@2
   displayName: 'Installer Azure CLI sur Windows'
   inputs:
@@ -16,9 +16,8 @@ steps:
     script: |
       if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
           Write-Output "Azure CLI non trouvé. Installation..."
-          Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile AzureCLI.msi
-          Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'
-          Remove-Item -Force AzureCLI.msi
+          # Utilise Invoke-Expression pour exécuter le script d'installation directement
+          Invoke-Expression -Command "& { $(Invoke-RestMethod -Uri https://aka.ms/installazurecliwindows) }"
       } else {
           Write-Output "Azure CLI est déjà installé."
       }
