@@ -17,7 +17,7 @@ steps:
     inlineScript: |
       # Variables pour Key Vault
       $resourceGroup = "keyVaultRG"
-      $keyVaultName = "TP1KeyVault"
+      $keyVaultName = "TP1EnvironnementCloudKeyVault"
 
       # Créer le groupe de ressources
       az group create --name $resourceGroup --location "EastUS"
