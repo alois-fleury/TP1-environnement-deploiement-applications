@@ -4,24 +4,24 @@ trigger:
       - master
 
 pool:
-  name: 'Default'
+  name: 'Default'  # Utiliser un agent Windows
 
 steps:
 - checkout: self  # Cloner le dépôt
 
 - task: AzureCLI@2
   inputs:
-    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'
-    scriptType: 'bash'
+    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)' 
+    scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
       # Variables pour Key Vault
-      RESOURCE_GROUP="keyVaultRG"
-      KEY_VAULT_NAME="TP1KeyVault"
+      $resourceGroup = "keyVaultRG"
+      $keyVaultName = "TP1KeyVault"
 
       # Créer le groupe de ressources
-      az group create --name $keyVaultRG --location "EastUS"
+      az group create --name $resourceGroup --location "EastUS"
 
       # Créer le Key Vault
-      az keyvault create --name $KEY_VAULT_NAME --resource-group $keyVaultRG --location "EastUS"
+      az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
   displayName: 'Créer un Key Vault dans Azure'
