@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+      - master
+
+pool:
+  vmImage: 'Default'
+
+steps:
+- checkout: self  # Cloner le dépôt
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      # Variables pour Key Vault
+      RESOURCE_GROUP="keyVaultRG"
+      KEY_VAULT_NAME="TP1KeyVault"
+
+      # Créer le groupe de ressources
+      az group create --name $keyVaultRG --location "EastUS"
+
+      # Créer le Key Vault
+      az keyvault create --name $KEY_VAULT_NAME --resource-group $keyVaultRG --location "EastUS"
+  displayName: 'Créer un Key Vault dans Azure'
