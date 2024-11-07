@@ -152,7 +152,7 @@
       "sku": {
         "name": "Standard"
       },
-      "zones": [1,2]
+      "zones": ["1","2"]
     },
     {
       "name": "[parameters('loadBalancerName')]",
