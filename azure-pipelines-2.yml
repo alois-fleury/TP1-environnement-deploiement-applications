@@ -10,7 +10,25 @@ pool:
 steps:
 - checkout: self  # Cloner le dépôt
 
-# Étape 1 : Encoder le contenu de cloud-init.txt en base64
+# Étape 1 : Création d'une keyVault avec un secret
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)' 
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      # Variables pour Key Vault
+      $resourceGroup = "keyVaultRG"
+      $keyVaultName = "TP1CloudkeyVault"
+
+      # Créer le groupe de ressources
+      az group create --name $resourceGroup --location "EastUS"
+
+      # Créer le Key Vault
+      az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
+  displayName: 'Créer un Key Vault dans Azure'
+
+# Étape 2 : Encoder le contenu de cloud-init.txt en base64
 - task: PowerShell@2
   displayName: "Encoder le contenu Cloud-Init"
   inputs:
