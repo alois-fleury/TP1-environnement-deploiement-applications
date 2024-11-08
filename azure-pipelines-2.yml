@@ -17,22 +17,22 @@ steps:
     scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      # Variables pour Key Vault
-      $resourceGroup = "keyVaultRG"
-      $keyVaultName = "TP1CloudkeyVault"
+      $resourceGroup = "$(resourceGroup)"
+      $keyVaultName = "$(keyVaultName)"
 
-      # Créer le groupe de ressources
       az group create --name $resourceGroup --location "EastUS"
-
-      # Créer le Key Vault
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
       
-      # Récupérer l'ID de l'objet du service principal de l'application liée à la pipeline
-      $spObjectId = (az ad sp show --id $(AZURE_CLIENT_ID) --query objectId -o tsv)
-      
-      az role assignment create --role "Key Vault Administrator" --assignee $spObjectId --scope "\subscriptions\40e22e55-8ff0-4611-b9d0-4a8db29b3460\resourceGroups\$resourceGroup\providers\Microsoft.KeyVault\vaults\$keyVaultName"
+      # Récupérer l'ID du service principal
+      $spObjectId = az ad sp show --id $(AZURE_CLIENT_ID) --query objectId -o tsv
 
-      # Générer un mot de passe aléatoire de 16 caractères
+      # Assigner le rôle "Key Vault Administrator"
+      az role assignment create --role "Key Vault Administrator" --assignee $spObjectId --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
+
+      # Pause de 30 secondes pour permettre la propagation des permissions
+      Start-Sleep -Seconds 30
+
+      # Générer un mot de passe aléatoire
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
       $password = -join ((1..16) | ForEach-Object { $characters[(Get-Random -Maximum $characters.Length)] })
       
