@@ -1,4 +1,3 @@
-# Étape 1 : Création d'une Key Vault avec un secret
 # Pipeline de déploiement ARM
 trigger:
   branches:
@@ -19,9 +18,16 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       # Variables pour Key Vault
-      $resourceGroup = "newKeyVaultRG"  # Changez le nom du groupe de ressources
-      $keyVaultName = "TP1CloudkeyVault"
+      $resourceGroup = "newKeyVaultRG"
+      $keyVaultName = "TP1CloudkeyVaultUnique123"  # Utiliser un nom unique pour éviter les conflits
       $servicePrincipalObjectId = "$(AZURE_CLIENT_ID)"
+
+      # Purge le Key Vault s'il est en état de suppression
+      try {
+          az keyvault purge --name $keyVaultName
+      } catch {
+          Write-Host "Purge n'a pas pu être exécuté ou n'était pas nécessaire."
+      }
 
       # Créer un nouveau groupe de ressources
       az group create --name $resourceGroup --location "EastUS"
@@ -29,10 +35,10 @@ steps:
       # Créer le Key Vault avec l'autorisation RBAC
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS" --enable-rbac-authorization
 
-      # Attendre 60 secondes pour s'assurer que le Key Vault et les permissions sont complètement propagées
-      Start-Sleep -Seconds 60
+      # Attendre 120 secondes pour la propagation complète des permissions RBAC
+      Start-Sleep -Seconds 120
 
-      # Attribuer le rôle Key Vault Contributor pour un accès complet au Key Vault
+      # Attribuer le rôle Key Vault Contributor pour un accès complet
       az role assignment create --role "Key Vault Contributor" --assignee-object-id $servicePrincipalObjectId --assignee-principal-type ServicePrincipal --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 
       # Vérifier si le rôle est correctement assigné
@@ -45,12 +51,11 @@ steps:
       # Générer un mot de passe aléatoire
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
       $password = -join ((1..16) | ForEach-Object { $characters[(Get-Random -Maximum $characters.Length)] })
-      
+
       # Ajouter le mot de passe comme secret dans Key Vault
       az keyvault secret set --vault-name $keyVaultName --name "mpVm" --value $password
-  
-  displayName: 'Créer un Key Vault dans Azure et ajouter le mot de passe'
 
+  displayName: 'Créer un Key Vault dans Azure et ajouter le mot de passe'
 
 # Étape 2 : Encoder le contenu de cloud-init.txt en base64
 - task: PowerShell@2
