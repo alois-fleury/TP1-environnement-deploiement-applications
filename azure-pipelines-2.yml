@@ -37,10 +37,7 @@ steps:
       # Attribuer le rôle RBAC à l'utilisateur courant pour gérer les secrets
       USER_ID=(az ad signed-in-user show --query objectId -o tsv)
 
-      KEYVAULT_ID=(az keyvault show --name $KEYVAULT_NAME \
-        --resource-group $KEYVAULT_RG \
-        --query id \
-        --output tsv)
+      KEYVAULT_ID=(az keyvault show --name $KEYVAULT_NAME --resource-group $KEYVAULT_RG --query id --output tsv)
 
       az role assignment create --role "Key Vault Secrets Officer" --scope $KEYVAULT_ID --assignee-object-id $USER_ID
 
