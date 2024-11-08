@@ -26,7 +26,7 @@ steps:
       az group create --name $resourceGroup --location "EastUS"
 
       # Créer le Key Vault
-      az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
+      az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS" --enable-rbac-authorization
 
       # Attendre 15 secondes pour s'assurer que le Key Vault est complètement créé
       Start-Sleep -Seconds 15
