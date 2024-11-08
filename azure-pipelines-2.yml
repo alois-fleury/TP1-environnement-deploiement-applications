@@ -19,9 +19,13 @@ steps:
     inlineScript: |
       $resourceGroup = "keyVaultRG"
       $keyVaultName = "TP1CloudkeyVault"
+      $servicePrincipalObjectId = $(AZURE_CLIENT_ID)
 
       az group create --name $resourceGroup --location "EastUS"
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
+
+      # Attribuer des permissions pour gérer les secrets dans le Key Vault
+      az keyvault set-policy --name $keyVaultName --object-id $servicePrincipalObjectId --secret-permissions get set list
 
       # Générer un mot de passe aléatoire
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
