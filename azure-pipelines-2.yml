@@ -27,6 +27,12 @@ steps:
       # Créer le Key Vault
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
       
+      # Récupérer l'ID de l'application de service
+      $appId = (az ad sp show --id $(AzureClientId) --query appId -o tsv)
+      
+      # Définir la politique d'accès au Key Vault pour l'application
+      az keyvault set-policy --name $keyVaultName --object-id $appId --secret-permissions get list set delete
+
       # Générer un mot de passe aléatoire de 16 caractères
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
       $password = -join ((1..16) | ForEach-Object { $characters[(Get-Random -Maximum $characters.Length)] })
