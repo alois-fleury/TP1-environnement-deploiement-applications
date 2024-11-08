@@ -40,7 +40,6 @@ steps:
     azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)' 
     KeyVaultName: 'TP1CloudkeyVault'
     SecretsFilter: 'mpVm'
-    RunAsPreJob: true
   displayName: 'Récupérer le mot de passe depuis le Key Vault'
 
 # Étape 3 : Encoder le contenu de cloud-init.txt en base64
