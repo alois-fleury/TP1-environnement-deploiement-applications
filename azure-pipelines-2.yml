@@ -30,9 +30,8 @@ steps:
       # Récupérer l'ID de l'objet du service principal de l'application liée à la pipeline
       $spObjectId = (az ad sp show --id $(AZURE_CLIENT_ID) --query objectId -o tsv)
       
-      # Donner les permissions d'accès au Key Vault pour gérer les secrets (lecture, écriture, suppression)
-      az keyvault set-policy --name $keyVaultName --object-id $spObjectId --secret-permissions get list set delete
-      
+      az role assignment create --role "Key Vault Administrator" --assignee $spObjectId --scope "\subscriptions\40e22e55-8ff0-4611-b9d0-4a8db29b3460\resourceGroups\$resourceGroup\providers\Microsoft.KeyVault\vaults\$keyVaultName"
+
       # Générer un mot de passe aléatoire de 16 caractères
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
       $password = -join ((1..16) | ForEach-Object { $characters[(Get-Random -Maximum $characters.Length)] })
