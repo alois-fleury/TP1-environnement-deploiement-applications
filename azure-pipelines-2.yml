@@ -24,8 +24,8 @@ steps:
       az group create --name $resourceGroup --location "EastUS"
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
 
-      # Attribuer des permissions pour gérer les secrets dans le Key Vault
-      az keyvault set-policy --name $keyVaultName --object-id $servicePrincipalObjectId --secret-permissions get set list
+      # Attribuer le rôle Key Vault Secrets User pour accéder aux secrets du Key Vault
+      az role assignment create --role "Key Vault Secrets User" --assignee $servicePrincipalObjectId --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 
       # Générer un mot de passe aléatoire
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
