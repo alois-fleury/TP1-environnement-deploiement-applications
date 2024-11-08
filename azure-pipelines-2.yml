@@ -27,8 +27,11 @@ steps:
       # Créer le Key Vault
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
       
-      # Donner les permissions à l'identité de l'application de service pour accéder aux secrets
-      az keyvault set-policy --name $keyVaultName --spn $(AzureServicePrincipalId) --secret-permissions get list set delete
+      # Récupérer l'ID du service principal lié à l'authentification de l'abonnement
+      $spObjectId = az ad signed-in-user show --query objectId -o tsv
+      
+      # Donner les permissions d'accès au Key Vault pour gérer les secrets
+      az keyvault set-policy --name $keyVaultName --object-id $spObjectId --secret-permissions get list set delete
       
       # Générer un mot de passe aléatoire de 16 caractères
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
