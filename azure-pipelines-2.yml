@@ -22,16 +22,24 @@ steps:
       $keyVaultName = "TP1CloudkeyVault"
       $servicePrincipalObjectId = "$(AZURE_CLIENT_ID)"
 
-      # Vérifiez si le groupe de ressources existe et le supprimer s'il est en déprovisionnement
-      $existingGroup = az group show --name $resourceGroup --query "provisioningState" -o tsv 2>$null
+      # Vérifiez si le groupe de ressources existe
+      try {
+        $existingGroup = az group show --name $resourceGroup --query "provisioningState" -o tsv 2>$null
+      } catch {
+        $existingGroup = $null
+      }
+
+      # Si le groupe de ressources existe et est en déprovisionnement, attendez la fin de la suppression
       if ($existingGroup -eq "Deleting" -or $existingGroup -eq "Failed") {
         az group delete --name $resourceGroup --yes --no-wait
         Write-Host "Attente de la suppression du groupe de ressources..."
         Start-Sleep -Seconds 60
       }
 
-      # Créer le groupe de ressources
-      az group create --name $resourceGroup --location "EastUS"
+      # Créez le groupe de ressources s'il n'existe pas
+      if (-not $existingGroup) {
+        az group create --name $resourceGroup --location "EastUS"
+      }
 
       # Créer le Key Vault
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS" --enable-rbac-authorization
