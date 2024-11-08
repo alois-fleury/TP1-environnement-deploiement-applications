@@ -17,8 +17,8 @@ steps:
     scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      $resourceGroup = "$(resourceGroup)"
-      $keyVaultName = "$(keyVaultName)"
+      $resourceGroup = "keyVaultRG"
+      $keyVaultName = "TP1CloudkeyVault"
 
       az group create --name $resourceGroup --location "EastUS"
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
