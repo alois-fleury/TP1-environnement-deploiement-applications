@@ -19,7 +19,7 @@ steps:
     inlineScript: |
       # Variables pour Key Vault
       $resourceGroup = "newKeyVaultRG"
-      $keyVaultName = "TP1CloudkeyVaultUnique123"  # Utiliser un nom unique pour éviter les conflits
+      $keyVaultName = "TP1CloudKeyVault123"  # Nom valide pour le Key Vault
       $servicePrincipalObjectId = "$(AZURE_CLIENT_ID)"
 
       # Purge le Key Vault s'il est en état de suppression
