@@ -27,7 +27,7 @@ steps:
       $spObjectId = az ad sp show --id $(AZURE_CLIENT_ID) --query objectId -o tsv
 
       # Assigner le rôle "Key Vault Administrator"
-      az role assignment create --role "Key Vault Administrator" --assignee $spObjectId --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
+      az role assignment create --role "Key Vault Secret Officer" --assignee $spObjectId --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 
       # Pause de 30 secondes pour permettre la propagation des permissions
       Start-Sleep -Seconds 30
