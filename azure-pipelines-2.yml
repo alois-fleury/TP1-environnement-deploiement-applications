@@ -35,11 +35,11 @@ steps:
       # az role assignment create --role "Key Vault Contributor" --assignee-object-id $servicePrincipalObjectId --assignee-principal-type ServicePrincipal --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 
       # Attribuer le rôle RBAC à l'utilisateur courant pour gérer les secrets
-      $userId=(az ad signed-in-user show --query objectId -o tsv)
+      # $userId=(az ad signed-in-user show --query objectId -o tsv)
 
-      $keyvaultId=(az keyvault show --name $KEYVAULT_NAME --resource-group $KEYVAULT_RG --query id --output tsv)
+      $keyvaultId=(az keyvault show --name $keyVaultName --resource-group $keyvaultRG --query id --output tsv)
 
-      az role assignment create --role "Key Vault Secrets Officer" --scope $keyvaultId --assignee-object-id $userId
+      az role assignment create --role "Key Vault Secrets Officer" --scope $keyvaultId --assignee-object-id $servicePrincipalObjectId --assignee-principal-type ServicePrincipal
 
       # Générer un mot de passe aléatoire
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
