@@ -42,9 +42,7 @@ steps:
         --query id \
         --output tsv)
 
-      az role assignment create --role "Key Vault Secrets Officer" \
-        --scope $KEYVAULT_ID \
-        --assignee-object-id $USER_ID
+      az role assignment create --role "Key Vault Secrets Officer" --scope $KEYVAULT_ID --assignee-object-id $USER_ID
 
       # Générer un mot de passe aléatoire
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
