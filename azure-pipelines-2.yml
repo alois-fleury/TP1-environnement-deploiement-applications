@@ -42,7 +42,7 @@ steps:
       Start-Sleep -Seconds 120
 
       # Attribuer temporairement le rôle "Owner"
-      az role assignment create --role "Owner" --assignee $servicePrincipalObjectId --assignee-principal-type "ServicePrincipal" --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup" --verbose
+      az role assignment delete --role "Owner" --assignee-object-id $servicePrincipalObjectId --assignee-principal-type "ServicePrincipal" --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup" --verbose
 
       # Vérifier si le rôle "Owner" est assigné
       $roleAssignmentOwner = az role assignment list --assignee $servicePrincipalObjectId --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup" --query "[?roleDefinitionName=='Owner']" -o json --verbose
