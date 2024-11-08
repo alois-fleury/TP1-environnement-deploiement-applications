@@ -1,4 +1,4 @@
-# Azure DevOps YAML Pipeline pour créer un Key Vault et ajouter un secret
+# Azure DevOps YAML Pipeline pour créer un Key Vault et gérer les permissions avec RBAC
 trigger:
   branches:
     include:
@@ -10,22 +10,20 @@ pool:
 steps:
 - checkout: self
 
-# Étape 1 : Création d'une Key Vault avec un secret
+# Étape 1 : Création d'un Key Vault avec RBAC activé
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'
     scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      # Variables
+      # Variables pour Key Vault et le groupe de ressources
       $resourceGroup = "keyVaultRG"
       $keyVaultName = "TP1CloudkeyVault"
       $servicePrincipalObjectId = "$(AZURE_CLIENT_ID)"
 
-      # Vérifiez si le groupe de ressources existe
+      # Vérification si le groupe de ressources existe ou est en cours de suppression
       $existingGroup = az group show --name $resourceGroup --query "provisioningState" -o tsv 2>$null
-
-      # Si le groupe de ressources est en déprovisionnement, attendez
       if ($existingGroup -eq "Deleting" -or $existingGroup -eq "Failed") {
         az group delete --name $resourceGroup --yes --no-wait
         Start-Sleep -Seconds 60
@@ -36,16 +34,16 @@ steps:
         az group create --name $resourceGroup --location "EastUS"
       }
 
-      # Créer le Key Vault avec RBAC activé
+      # Créez le Key Vault avec l'option RBAC activée
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS" --enable-rbac-authorization
 
-      # Attendre 15 secondes pour s'assurer que le Key Vault est créé
+      # Attendre que le Key Vault soit entièrement disponible
       Start-Sleep -Seconds 15
 
-      # Attribuer le rôle Key Vault Secrets User au Service Principal via RBAC
+      # Attribuer le rôle Key Vault Secrets User au Service Principal
       az role assignment create --role "Key Vault Secrets User" --assignee-object-id $servicePrincipalObjectId --assignee-principal-type ServicePrincipal --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 
-      # Attendre la propagation des permissions RBAC
+      # Attendre la propagation des permissions RBAC (peut prendre quelques minutes)
       Start-Sleep -Seconds 120
 
       # Générer un mot de passe aléatoire
@@ -54,7 +52,8 @@ steps:
 
       # Ajouter le mot de passe comme secret dans Key Vault
       az keyvault secret set --vault-name $keyVaultName --name "mpVm" --value $password
-  displayName: 'Créer un Key Vault dans Azure et ajouter le mot de passe'
+  displayName: 'Créer un Key Vault dans Azure et ajouter le mot de passe avec RBAC'
+
 
 
 # Étape 2 : Récupérer le mot de passe du Key Vault
