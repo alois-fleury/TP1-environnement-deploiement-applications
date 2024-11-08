@@ -22,6 +22,14 @@ steps:
       $keyVaultName = "TP1CloudkeyVault"
       $servicePrincipalObjectId = "$(AZURE_CLIENT_ID)"
 
+      # Vérifiez si le groupe de ressources existe et le supprimer s'il est en déprovisionnement
+      $existingGroup = az group show --name $resourceGroup --query "provisioningState" -o tsv 2>$null
+      if ($existingGroup -eq "Deleting" -or $existingGroup -eq "Failed") {
+        az group delete --name $resourceGroup --yes --no-wait
+        Write-Host "Attente de la suppression du groupe de ressources..."
+        Start-Sleep -Seconds 60
+      }
+
       # Créer le groupe de ressources
       az group create --name $resourceGroup --location "EastUS"
 
@@ -32,10 +40,14 @@ steps:
       Start-Sleep -Seconds 15
 
       # Attribuer le rôle Key Vault Secrets User pour accéder aux secrets du Key Vault
-      az role assignment create --role "Key Vault Secrets User" --assignee-object-id $servicePrincipalObjectId --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
+      az role assignment create --role "Key Vault Secrets User" --assignee-object-id $servicePrincipalObjectId --assignee-principal-type ServicePrincipal --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 
-      # Attendre 30 secondes pour s'assurer que les permissions sont propagées
-      Start-Sleep -Seconds 30
+      # Attendre 120 secondes pour s'assurer que les permissions sont propagées
+      Write-Host "Attente de 120 secondes pour la propagation des permissions RBAC..."
+      Start-Sleep -Seconds 120
+
+      # Définir une stratégie d'accès Key Vault pour le service principal
+      az keyvault set-policy --name $keyVaultName --object-id $servicePrincipalObjectId --secret-permissions set
 
       # Générer un mot de passe aléatoire
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
