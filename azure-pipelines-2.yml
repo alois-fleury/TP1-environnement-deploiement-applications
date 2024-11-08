@@ -27,10 +27,10 @@ steps:
       # Créer le Key Vault
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
       
-      # Récupérer l'ID du service principal lié à l'authentification de l'abonnement
-      $spObjectId = az ad signed-in-user show --query objectId -o tsv
+      # Récupérer l'ID de l'objet du service principal de l'application liée à la pipeline
+      $spObjectId = (az ad sp show --id $(AZURE_CLIENT_ID) --query objectId -o tsv)
       
-      # Donner les permissions d'accès au Key Vault pour gérer les secrets
+      # Donner les permissions d'accès au Key Vault pour gérer les secrets (lecture, écriture, suppression)
       az keyvault set-policy --name $keyVaultName --object-id $spObjectId --secret-permissions get list set delete
       
       # Générer un mot de passe aléatoire de 16 caractères
