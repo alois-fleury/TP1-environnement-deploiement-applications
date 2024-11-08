@@ -11,40 +11,42 @@ steps:
 - checkout: self  # Cloner le dépôt
 
 # Étape 1 : Création d'une Key Vault avec un secret
+# Vérifiez les permissions en boucle jusqu'à ce que l'accès soit confirmé
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'
     scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      # Variables pour Key Vault
-      $resourceGroup = "keyVaultRG"
-      $keyVaultName = "TP1CloudkeyVault"
-      $servicePrincipalObjectId = "$(AZURE_CLIENT_ID)"
+      # Boucle pour vérifier les permissions (maximum 5 minutes)
+      $maxAttempts = 10
+      $attempt = 0
+      $permissionsGranted = $false
 
-      # Créer le groupe de ressources
-      az group create --name $resourceGroup --location "EastUS"
+      while (-not $permissionsGranted -and $attempt -lt $maxAttempts) {
+          try {
+              # Tenter de créer un secret de test pour vérifier les permissions
+              az keyvault secret set --vault-name $keyVaultName --name "testPermissionCheck" --value "testValue" | Out-Null
+              $permissionsGranted = $true
+          } catch {
+              Write-Host "Les permissions ne sont pas encore propagées. Tentative $($attempt + 1)/$maxAttempts. Attente de 30 secondes..."
+              Start-Sleep -Seconds 30
+              $attempt++
+          }
+      }
 
-      # Créer le Key Vault
-      az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS" --enable-rbac-authorization
+      if (-not $permissionsGranted) {
+          throw "Les permissions RBAC n'ont pas été propagées après 5 minutes. Vérifiez la configuration."
+      }
 
-      # Attendre 30 secondes pour s'assurer que le Key Vault est complètement créé
-      Start-Sleep -Seconds 30
-
-      # Attribuer le rôle Key Vault Contributor pour accéder aux secrets du Key Vault
-      az role assignment create --role "Key Vault Contributor" --assignee-object-id $servicePrincipalObjectId --assignee-principal-type ServicePrincipal --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
-
-      # Attendre la propagation des permissions RBAC (120 secondes)
-      Start-Sleep -Seconds 120
-
-      # Générer un mot de passe aléatoire
+      # Si les permissions sont en place, créer le mot de passe réel
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
       $password = -join ((1..16) | ForEach-Object { $characters[(Get-Random -Maximum $characters.Length)] })
-
-      # Ajouter le mot de passe comme secret dans Key Vault
+      
       az keyvault secret set --vault-name $keyVaultName --name "mpVm" --value $password
   
-  displayName: 'Créer un Key Vault dans Azure et ajouter le mot de passe'
+  displayName: 'Créer un Key Vault dans Azure et ajouter le mot de passe après vérification des permissions'
+
 
 # Étape 2 : Encoder le contenu de cloud-init.txt en base64
 - task: PowerShell@2
