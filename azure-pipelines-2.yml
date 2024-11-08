@@ -32,7 +32,7 @@ steps:
       Start-Sleep -Seconds 15
 
       # Attribuer le rôle Key Vault Secrets User pour accéder aux secrets du Key Vault
-      az role assignment create --role "Key Vault Contributor" --assignee-object-id $servicePrincipalObjectId --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
+      az role assignment create --role "Key Vault Contributor" --assignee-object-id $servicePrincipalObjectId --assignee-principal-type ServicePrincipal --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 
       # Générer un mot de passe aléatoire
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
