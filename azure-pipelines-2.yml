@@ -26,9 +26,24 @@ steps:
 
       # Créer le Key Vault
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
-  displayName: 'Créer un Key Vault dans Azure'
+      
+      # Générer un mot de passe aléatoire
+      $password = [System.Web.Security.Membership]::GeneratePassword(16, 3)
+      
+      # Ajouter le mot de passe comme secret dans Key Vault
+      az keyvault secret set --vault-name $keyVaultName --name "mpVm" --value $password
+  displayName: 'Créer un Key Vault dans Azure et ajouter le mot de passe'
 
-# Étape 2 : Encoder le contenu de cloud-init.txt en base64
+# Étape 2 : Récupérer le mot de passe du Key Vault
+- task: AzureKeyVault@2
+  inputs:
+    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)' 
+    KeyVaultName: 'TP1CloudkeyVault'
+    SecretsFilter: 'mpVm'
+    RunAsPreJob: true
+  displayName: 'Récupérer le mot de passe depuis le Key Vault'
+
+# Étape 3 : Encoder le contenu de cloud-init.txt en base64
 - task: PowerShell@2
   displayName: "Encoder le contenu Cloud-Init"
   inputs:
@@ -41,7 +56,7 @@ steps:
       # Définir la variable CloudIniContent pour l'étape suivante
       Write-Host "##vso[task.setvariable variable=CloudIniContent;]$encodedContent"
 
-# Étape 2 : Déploiement ARM avec la variable AdminPass et CloudIniContent
+# Étape 4 : Déploiement ARM avec la variable AdminPass et CloudIniContent
 - task: AzureResourceManagerTemplateDeployment@3
   displayName: "Déployer le modèle ARM avec paramètres"
   inputs:
@@ -54,5 +69,5 @@ steps:
     templateLocation: 'Linked artifact'
     csmFile: '$(Build.SourcesDirectory)\projet-cloud\vms\azuredeploy.json'
     csmParametersFile: '$(Build.SourcesDirectory)\projet-cloud\vms\azuredeploy.parameters.json'
-    overrideParameters: '-customData "$(CloudIniContent)" -adminPassword "$(AdminPass)"'
+    overrideParameters: '-customData "$(CloudIniContent)" -adminPassword "$(mpVm)"'
     deploymentMode: 'Incremental'
