@@ -28,6 +28,9 @@ steps:
       # Créer le Key Vault
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS"
 
+      # Attendre 15 secondes pour s'assurer que le Key Vault est complètement créé
+      Start-Sleep -Seconds 15
+
       # Attribuer le rôle Key Vault Secrets User pour accéder aux secrets du Key Vault
       az role assignment create --role "Key Vault Contributor" --assignee-object-id $servicePrincipalObjectId --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 
