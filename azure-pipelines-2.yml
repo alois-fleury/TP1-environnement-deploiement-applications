@@ -9,16 +9,14 @@ pool:
 
 steps:
 - checkout: self  # Cloner le dépôt
-- task: AzureResourceManagerTemplateDeployment@3
+- task: AzureResourceGroupDeployment@2
   inputs:
-    deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'
-    subscriptionId: '40e22e55-8ff0-4611-b9d0-4a8db29b3460'
+    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'
     action: 'WhatIf'
-    templateLocation: 'Linked artifact'
-    csmFile: 'azuredeploy.json'  # Fichier JSON ARM
-    location: 'East US'
     resourceGroupName: 'TP1'
+    location: 'East US'
+    csmFile: '$(Build.SourcesDirectory)/projet-cloud/vms/azuredeploy.json'  # Chemin du fichier ARM
+    csmParametersFile: '$(Build.SourcesDirectory)/projet-cloud/vms/vm-deployment.parameters.json'  # Paramètres du modèle ARM
 # Étape 1 : Création d'une Key Vault avec un secret
 - task: AzureCLI@2
   inputs:
