@@ -8,17 +8,19 @@ pool:
   name: 'Default'  # Utilisation de l'agent auto-hébergé
 
 steps:
-- checkout: self  # Cloner le dépôt
+- checkout: self  # Clonage du dépôt
 - task: AzureCLI@2
   displayName: 'Créer le groupe de ressources TP1'
   inputs:
-    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'  # Votre connexion Azure DevOps
-    scriptType: 'ps'
+    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'  # La connexion Azure DevOps
+    scriptType: 'ps' # Indique que le type de script est powershell
     scriptLocation: 'inlineScript'
+    # Création d'un Azure Ressource Group en East US
     inlineScript: |
       New-AzResourceGroup -Name TP1 -Location "East US"
     addSpnToEnvironment: true
 - task: PowerShell@2
+  # Génération d'un mot de passe aléatoire
   displayName: 'Generate random password'
   inputs:
     targetType: 'inline'
@@ -29,9 +31,10 @@ steps:
       $password = "`"$password`""
       Write-Host "##vso[task.setvariable variable=adminPassword]$password"
 - task: AzureCLI@2
+  # Simulation du déploiement (pour vérifier que tout fonctionne bien)
   displayName: "Simuler le déploiement avec Azure CLI (WhatIf)"
   inputs:
-    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'  # Nom de votre connexion service
+    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'  # Nom de la connexion service
     scriptType: 'ps'  
     scriptLocation: 'inlineScript'
     inlineScript: |
@@ -61,13 +64,13 @@ steps:
       } catch {
           Write-Host "Purge n'a pas pu être exécuté ou n'était pas nécessaire."
       }
-      # Créer un nouveau groupe de ressources
+      # Création d'un nouveau groupe de ressources
       az group create --name $resourceGroup --location "EastUS" --verbose
-      # Créer le Key Vault avec l'autorisation RBAC
+      # Création d'un Key Vault avec l'autorisation RBAC
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS" --enable-rbac-authorization --verbose
-      # Attendre 120 secondes pour la propagation complète des permissions RBAC
+      # Attente de 120 secondes pour la propagation complète des permissions RBAC
       Start-Sleep -Seconds 120
-      # Attribuer temporairement le rôle "Owner"
+      # Attribution temporaire du rôle "Owner" (Propriétaire)
       az role assignment create --role "Owner" --assignee-object-id $servicePrincipalObjectId --assignee-principal-type "ServicePrincipal" --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup" --verbose
       az role assignment create --role "Owner" --assignee $servicePrincipalObjectId --assignee-principal-type "ServicePrincipal" --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup" --verbose
       # Vérifier si le rôle "Owner" est assigné
@@ -100,8 +103,8 @@ steps:
   displayName: "Déployer le modèle ARM avec paramètres"
   inputs:
     deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'  # Remplacez par votre connexion Azure DevOps
-    subscriptionId: '40e22e55-8ff0-4611-b9d0-4a8db29b3460'  # Remplacez par votre ID de souscription
+    azureResourceManagerConnection: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'
+    subscriptionId: '40e22e55-8ff0-4611-b9d0-4a8db29b3460'
     action: 'Create Or Update Resource Group'
     resourceGroupName: 'TP1'
     location: 'East US'
