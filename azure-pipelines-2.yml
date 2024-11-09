@@ -19,7 +19,7 @@ steps:
       az deployment group what-if `
         --resource-group TP1 `
         --template-file "$(Build.SourcesDirectory)/projet-cloud/vms/azuredeploy.json" `
-        --parameters "@$(Build.SourcesDirectory)/projet-cloud/vms/azuredeploy.parameters.json" `
+        --parameters "@$(Build.SourcesDirectory)/projet-cloud/vms/azuredeploy.parameters.json" 
 
 # Étape 1 : Création d'une Key Vault avec un secret
 - task: AzureCLI@2
