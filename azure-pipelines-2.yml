@@ -18,6 +18,14 @@ steps:
     inlineScript: |
       New-AzResourceGroup -Name TP1 -Location "East US"
     addSpnToEnvironment: true
+- task: PowerShell@2
+  displayName: 'Generate random password'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
+      $password = -join ((1..16) | ForEach-Object { $characters[(Get-Random -Maximum $characters.Length)] })
+      Write-Host "##vso[task.setvariable variable=adminPassword]$password"
 - task: AzureCLI@2
   displayName: "Simuler le déploiement avec Azure CLI (WhatIf)"
   inputs:
@@ -28,6 +36,7 @@ steps:
       az deployment group what-if `
         --resource-group TP1 `
         --template-file "$(Build.SourcesDirectory)/projet-cloud/vms/azuredeploy.json" `
+        --parameters adminPassword=$(adminPassword) `
         --parameters "@$(Build.SourcesDirectory)/projet-cloud/vms/azuredeploy.parameters.json" 
 
 # Étape 1 : Création d'une Key Vault avec un secret
@@ -64,9 +73,6 @@ steps:
           Write-Error "Le rôle 'Owner' n'a pas été correctement assigné."
           exit 1
       }
-      # Générer un mot de passe aléatoire
-      $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
-      $password = -join ((1..16) | ForEach-Object { $characters[(Get-Random -Maximum $characters.Length)] })
       # Encapsuler le mot de passe pour éviter des erreurs d'interprétation
       $password = "`"$password`""
       # Ajouter le mot de passe comme secret dans Key Vault
