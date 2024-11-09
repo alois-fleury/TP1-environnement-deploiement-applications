@@ -10,11 +10,11 @@ pool:
 steps:
 - checkout: self  # Cloner le dépôt
 - task: AzureResourceManagerTemplateDeployment@3
-  displayName: "Création du ressource groupe des vm"
+  displayName: "Création du groupe de ressources des VM"
   inputs:
     deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'  # Remplacez par votre connexion Azure DevOps
-    subscriptionId: '40e22e55-8ff0-4611-b9d0-4a8db29b3460'  # Remplacez par votre ID de souscription
+    azureResourceManagerConnection: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'  # Connexion Azure DevOps
+    subscriptionId: '40e22e55-8ff0-4611-b9d0-4a8db29b3460'  # ID de souscription Azure
     action: 'Create Or Update Resource Group'
     resourceGroupName: 'TP1'
     location: 'East US'
