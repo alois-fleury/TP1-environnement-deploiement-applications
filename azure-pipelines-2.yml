@@ -19,51 +19,41 @@ steps:
     inlineScript: |
       # Options de débogage
       az config set core.log_level=debug
-
       # Variables pour Key Vault
       $resourceGroup = "newKeyVaultRG"
       $keyVaultName = "TP1CloudKeyVault123"  # Utiliser un nom unique pour éviter les conflits
       $servicePrincipalObjectId = "$(AZURE_CLIENT_ID)"
-
       # Purge le Key Vault s'il est en état de suppression
       try {
           az keyvault purge --name $keyVaultName --verbose
       } catch {
           Write-Host "Purge n'a pas pu être exécuté ou n'était pas nécessaire."
       }
-
       # Créer un nouveau groupe de ressources
       az group create --name $resourceGroup --location "EastUS" --verbose
-
       # Créer le Key Vault avec l'autorisation RBAC
       az keyvault create --name $keyVaultName --resource-group $resourceGroup --location "EastUS" --enable-rbac-authorization --verbose
-
       # Attendre 120 secondes pour la propagation complète des permissions RBAC
       Start-Sleep -Seconds 120
-
       # Attribuer temporairement le rôle "Owner"
-      az role assignment delete --role "Owner" --assignee-object-id $servicePrincipalObjectId --assignee-principal-type "ServicePrincipal" --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup" --verbose
-
+      az role assignment create --role "Owner" --assignee-object-id $servicePrincipalObjectId --assignee-principal-type "ServicePrincipal" --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup" --verbose
+      az role assignment create --role "Owner" --assignee $servicePrincipalObjectId --assignee-principal-type "ServicePrincipal" --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup" --verbose
       # Vérifier si le rôle "Owner" est assigné
       $roleAssignmentOwner = az role assignment list --assignee $servicePrincipalObjectId --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup" --query "[?roleDefinitionName=='Owner']" -o json --verbose
       if (-not $roleAssignmentOwner) {
           Write-Error "Le rôle 'Owner' n'a pas été correctement assigné."
           exit 1
       }
-
       # Générer un mot de passe aléatoire
       $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+'
       $password = -join ((1..16) | ForEach-Object { $characters[(Get-Random -Maximum $characters.Length)] })
-
       # Encapsuler le mot de passe pour éviter des erreurs d'interprétation
       $password = "`"$password`""
-
       # Ajouter le mot de passe comme secret dans Key Vault
       az keyvault secret set --vault-name $keyVaultName --name "mpVm" --value $password --verbose
-
       # Revenir au rôle plus restrictif une fois le secret ajouté
+      az role assignment delete --role "Owner" --assignee-object-id $servicePrincipalObjectId --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup" --verbose
       az role assignment delete --role "Owner" --assignee $servicePrincipalObjectId --scope "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/$resourceGroup" --verbose
-
   displayName: 'Créer un Key Vault dans Azure et ajouter le mot de passe avec rôle temporaire "Owner"'
 
 # Étape 2 : Encoder le contenu de cloud-init.txt en base64
@@ -78,7 +68,6 @@ steps:
       $encodedContent = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($cloudContent))
       # Définir la variable CloudIniContent pour l'étape suivante
       Write-Host "##vso[task.setvariable variable=CloudIniContent;]$encodedContent"
-
 # Étape 3 : Déploiement ARM avec la variable AdminPass et CloudIniContent
 - task: AzureResourceManagerTemplateDeployment@3
   displayName: "Déployer le modèle ARM avec paramètres"
