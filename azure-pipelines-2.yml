@@ -9,14 +9,19 @@ pool:
 
 steps:
 - checkout: self  # Cloner le dépôt
-- task: AzureResourceGroupDeployment@2
+- task: AzureCLI@2
+  displayName: "Simuler le déploiement avec Azure CLI (WhatIf)"
   inputs:
-    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'
-    action: 'WhatIf'
-    resourceGroupName: 'TP1'
-    location: 'East US'
-    csmFile: '$(Build.SourcesDirectory)/projet-cloud/vms/azuredeploy.json'  # Chemin du fichier ARM
-    csmParametersFile: '$(Build.SourcesDirectory)/projet-cloud/vms/vm-deployment.parameters.json'  # Paramètres du modèle ARM
+    azureSubscription: 'Azure subscription 1(40e22e55-8ff0-4611-b9d0-4a8db29b3460)'  # Nom de votre connexion service
+    scriptType: 'ps'  
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az deployment group what-if \
+        --resource-group TP1 \
+        --template-file "$(Build.SourcesDirectory)/projet-cloud/vms/azuredeploy.json" \
+        --parameters "@$(Build.SourcesDirectory)/projet-cloud/vms/azuredeploy.parameters.json" \
+        --location 'East US' 
+
 # Étape 1 : Création d'une Key Vault avec un secret
 - task: AzureCLI@2
   inputs:
