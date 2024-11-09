@@ -20,7 +20,6 @@ steps:
         --resource-group TP1 `
         --template-file "$(Build.SourcesDirectory)/projet-cloud/vms/azuredeploy.json" `
         --parameters "@$(Build.SourcesDirectory)/projet-cloud/vms/azuredeploy.parameters.json" `
-        --location 'East US'
 
 # Étape 1 : Création d'une Key Vault avec un secret
 - task: AzureCLI@2
