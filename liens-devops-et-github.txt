@@ -1,0 +1,2 @@
+https://dev.azure.com/aloisfleuryca/TP1-8CLD201-Arthur-Alois-Ewen-Osama
+https://github.com/alois-fleury/TP1-environnement-deploiement-applications

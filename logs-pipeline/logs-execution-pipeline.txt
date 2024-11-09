@@ -1,0 +1,580 @@
+2024-11-09T06:40:44.5964534Z ##[section]Starting: Job
+2024-11-09T06:40:44.9072780Z ##[section]Starting: Initialize job
+2024-11-09T06:40:44.9077200Z Agent name: 'ALOIS_TP1_ENVDEPAPPS'
+2024-11-09T06:40:44.9077835Z Agent machine name: 'DESKTOP-85R6Q0J'
+2024-11-09T06:40:44.9078160Z Current agent version: '3.246.0'
+2024-11-09T06:40:45.0318571Z Agent running as: 'Allow'
+2024-11-09T06:40:45.0357872Z Prepare build directory.
+2024-11-09T06:40:45.1367913Z Set build variables.
+2024-11-09T06:40:45.1427985Z Download all required tasks.
+2024-11-09T06:40:45.3841752Z Checking job knob settings.
+2024-11-09T06:40:45.3845469Z    Knob: DockerActionRetries = true Source: $(VSTSAGENT_DOCKER_ACTION_RETRIES) 
+2024-11-09T06:40:45.3847310Z    Knob: UseGitLongPaths = true Source: $(USE_GIT_LONG_PATHS) 
+2024-11-09T06:40:45.3849495Z    Knob: EnableIssueSourceValidation = true Source: $(ENABLE_ISSUE_SOURCE_VALIDATION) 
+2024-11-09T06:40:45.3850448Z    Knob: AgentEnablePipelineArtifactLargeChunkSize = true Source: $(AGENT_ENABLE_PIPELINEARTIFACT_LARGE_CHUNK_SIZE) 
+2024-11-09T06:40:45.3854636Z    Knob: ContinueAfterCancelProcessTreeKillAttempt = true Source: $(VSTSAGENT_CONTINUE_AFTER_CANCEL_PROCESSTREEKILL_ATTEMPT) 
+2024-11-09T06:40:45.3855529Z    Knob: ProcessHandlerSecureArguments = false Source: $(AZP_75787_ENABLE_NEW_LOGIC) 
+2024-11-09T06:40:45.3856149Z    Knob: ProcessHandlerSecureArguments = false Source: $(AZP_75787_ENABLE_NEW_LOGIC_LOG) 
+2024-11-09T06:40:45.3856739Z    Knob: ProcessHandlerTelemetry = true Source: $(AZP_75787_ENABLE_COLLECT) 
+2024-11-09T06:40:45.3857570Z    Knob: UseNewNodeHandlerTelemetry = True Source: $(DistributedTask.Agent.USENEWNODEHANDLERTELEMETRY) 
+2024-11-09T06:40:45.3858188Z    Knob: ProcessHandlerEnableNewLogic = true Source: $(AZP_75787_ENABLE_NEW_PH_LOGIC) 
+2024-11-09T06:40:45.3859076Z    Knob: EnableResourceMonitorDebugOutput = true Source: $(AZP_ENABLE_RESOURCE_MONITOR_DEBUG_OUTPUT) 
+2024-11-09T06:40:45.3859730Z    Knob: EnableResourceUtilizationWarnings = true Source: $(AZP_ENABLE_RESOURCE_UTILIZATION_WARNINGS) 
+2024-11-09T06:40:45.3862686Z    Knob: IgnoreVSTSTaskLib = true Source: $(AZP_AGENT_IGNORE_VSTSTASKLIB) 
+2024-11-09T06:40:45.3863242Z    Knob: FailJobWhenAgentDies = true Source: $(FAIL_JOB_WHEN_AGENT_DIES) 
+2024-11-09T06:40:45.3863965Z    Knob: CheckForTaskDeprecation = true Source: $(AZP_AGENT_CHECK_FOR_TASK_DEPRECATION) 
+2024-11-09T06:40:45.3864806Z    Knob: CheckIfTaskNodeRunnerIsDeprecated246 = True Source: $(DistributedTask.Agent.CheckIfTaskNodeRunnerIsDeprecated246) 
+2024-11-09T06:40:45.3865629Z    Knob: UseNode20ToStartContainer = True Source: $(DistributedTask.Agent.UseNode20ToStartContainer) 
+2024-11-09T06:40:45.3866370Z    Knob: LogTaskNameInUserAgent = true Source: $(AZP_AGENT_LOG_TASKNAME_IN_USERAGENT) 
+2024-11-09T06:40:45.3866983Z    Knob: UseFetchFilterInCheckoutTask = true Source: $(AGENT_USE_FETCH_FILTER_IN_CHECKOUT_TASK) 
+2024-11-09T06:40:45.3867986Z    Knob: Rosetta2Warning = true Source: $(ROSETTA2_WARNING) 
+2024-11-09T06:40:45.3869566Z    Knob: AddForceCredentialsToGitCheckout = True Source: $(DistributedTask.Agent.AddForceCredentialsToGitCheckout) 
+2024-11-09T06:40:45.3870265Z Finished checking job knob settings.
+2024-11-09T06:40:45.3918690Z ##[section]Async Command Start: WindowsPreinstalledGitTelemetry
+2024-11-09T06:40:45.3919289Z ##[section]Async Command End: WindowsPreinstalledGitTelemetry
+2024-11-09T06:40:45.5625698Z Plugin: 'Test Result Parser plugin' is running in background.
+2024-11-09T06:40:45.5625980Z Plugin: 'Test File Publisher plugin' is running in background.
+2024-11-09T06:40:45.5626480Z Start tracking orphan processes.
+2024-11-09T06:40:45.6221134Z ##[section]Finishing: Initialize job
+2024-11-09T06:40:45.6411098Z ##[section]Async Command Start: WindowsPreinstalledGitTelemetry
+2024-11-09T06:40:45.6411454Z ##[section]Async Command End: WindowsPreinstalledGitTelemetry
+2024-11-09T06:40:45.6412157Z ##[section]Async Command Start: WindowsPreinstalledGitTelemetry
+2024-11-09T06:40:45.6412486Z ##[section]Async Command End: WindowsPreinstalledGitTelemetry
+2024-11-09T06:40:45.6414782Z ##[section]Async Command Start: WindowsPreinstalledGitTelemetry
+2024-11-09T06:40:45.6415129Z ##[section]Async Command End: WindowsPreinstalledGitTelemetry
+2024-11-09T06:40:45.6617068Z ##[section]Starting: Checkout alois-fleury/TP1-environnement-deploiement-applications@master to s
+2024-11-09T06:40:45.6859170Z ==============================================================================
+2024-11-09T06:40:45.6860478Z Task         : Get sources
+2024-11-09T06:40:45.6860827Z Description  : Get sources from a repository. Supports Git, TfsVC, and SVN repositories.
+2024-11-09T06:40:45.6861046Z Version      : 1.0.0
+2024-11-09T06:40:45.6861302Z Author       : Microsoft
+2024-11-09T06:40:45.6861598Z Help         : [More Information](https://go.microsoft.com/fwlink/?LinkId=798199)
+2024-11-09T06:40:45.6861799Z ==============================================================================
+2024-11-09T06:40:46.2638152Z Syncing repository: alois-fleury/TP1-environnement-deploiement-applications (GitHub)
+2024-11-09T06:40:46.2645309Z Prepending Path environment variable with directory containing 'git.exe'.
+2024-11-09T06:40:46.2652621Z ##[command]git version
+2024-11-09T06:40:46.4109005Z git version 2.45.2.windows.1
+2024-11-09T06:40:46.4140201Z ##[command]git lfs version
+2024-11-09T06:40:46.5922346Z git-lfs/3.4.0 (GitHub; windows amd64; go 1.20.6; git d06d6e9e)
+2024-11-09T06:40:46.6026661Z ##[command]git config --get remote.origin.url
+2024-11-09T06:40:46.7255980Z ##[command]git clean -ffdx
+2024-11-09T06:40:46.8649408Z ##[command]git reset --hard HEAD
+2024-11-09T06:40:47.1133727Z HEAD is now at 405730c Update azure-pipelines-2.yml for Azure Pipelines
+2024-11-09T06:40:47.1288779Z ##[command]git config gc.auto 0
+2024-11-09T06:40:47.2111148Z ##[command]git config core.longpaths true
+2024-11-09T06:40:47.2264154Z ##[command]git config --get-all http.https://github.com/alois-fleury/TP1-environnement-deploiement-applications.extraheader
+2024-11-09T06:40:47.3277338Z ##[command]git config --get-all http.extraheader
+2024-11-09T06:40:47.4205141Z ##[command]git config --get-regexp .*extraheader
+2024-11-09T06:40:47.5142792Z ##[command]git config --get-all http.proxy
+2024-11-09T06:40:47.6230540Z ##[command]git config http.version HTTP/1.1
+2024-11-09T06:40:47.7594664Z ##[command]git --config-env=http.extraheader=env_var_http.extraheader fetch --force --tags --prune --prune-tags --progress --no-recurse-submodules origin --depth=1  +fda99c25c66729121f2f387c5bc98b664750ee94:refs/remotes/origin/fda99c25c66729121f2f387c5bc98b664750ee94
+2024-11-09T06:40:51.1482389Z remote: Enumerating objects: 5, done.        
+2024-11-09T06:40:51.1485259Z remote: Counting objects:  20% (1/5)        
+2024-11-09T06:40:51.1486422Z remote: Counting objects:  40% (2/5)        
+2024-11-09T06:40:51.1487084Z remote: Counting objects:  60% (3/5)        
+2024-11-09T06:40:51.1488208Z remote: Counting objects:  80% (4/5)        
+2024-11-09T06:40:51.1489150Z remote: Counting objects: 100% (5/5)        
+2024-11-09T06:40:51.1489810Z remote: Counting objects: 100% (5/5), done.        
+2024-11-09T06:40:51.1490380Z remote: Compressing objects:  33% (1/3)        
+2024-11-09T06:40:51.1490957Z remote: Compressing objects:  66% (2/3)        
+2024-11-09T06:40:51.1492784Z remote: Compressing objects: 100% (3/3)        
+2024-11-09T06:40:51.1499160Z remote: Compressing objects: 100% (3/3), done.        
+2024-11-09T06:40:51.1502580Z remote: Total 3 (delta 2), reused 1 (delta 0), pack-reused 0 (from 0)        
+2024-11-09T06:40:51.2661940Z From https://github.com/alois-fleury/TP1-environnement-deploiement-applications
+2024-11-09T06:40:51.2663125Z  * [new ref]         fda99c25c66729121f2f387c5bc98b664750ee94 -> origin/fda99c25c66729121f2f387c5bc98b664750ee94
+2024-11-09T06:40:51.3478185Z ##[command]git --config-env=http.extraheader=env_var_http.extraheader fetch --force --tags --prune --prune-tags --progress --no-recurse-submodules origin --depth=1  +fda99c25c66729121f2f387c5bc98b664750ee94
+2024-11-09T06:40:52.1309313Z remote: Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)        
+2024-11-09T06:40:52.1819091Z From https://github.com/alois-fleury/TP1-environnement-deploiement-applications
+2024-11-09T06:40:52.1820830Z  * branch            fda99c25c66729121f2f387c5bc98b664750ee94 -> FETCH_HEAD
+2024-11-09T06:40:52.2842526Z ##[command]git checkout --progress --force refs/remotes/origin/fda99c25c66729121f2f387c5bc98b664750ee94
+2024-11-09T06:40:52.3902963Z Previous HEAD position was 405730c Update azure-pipelines-2.yml for Azure Pipelines
+2024-11-09T06:40:52.3903545Z HEAD is now at fda99c2 Ajout et reformulation des commentaires
+2024-11-09T06:40:52.4257430Z ##[section]Finishing: Checkout alois-fleury/TP1-environnement-deploiement-applications@master to s
+2024-11-09T06:40:52.4312083Z ##[section]Starting: Créer le groupe de ressources TP1
+2024-11-09T06:40:52.4330142Z ==============================================================================
+2024-11-09T06:40:52.4330855Z Task         : Azure CLI
+2024-11-09T06:40:52.4331311Z Description  : Run Azure CLI commands against an Azure subscription in a PowerShell Core/Shell script when running on Linux agent or PowerShell/PowerShell Core/Batch script when running on Windows agent.
+2024-11-09T06:40:52.4331982Z Version      : 2.247.3
+2024-11-09T06:40:52.4332268Z Author       : Microsoft Corporation
+2024-11-09T06:40:52.4332680Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/deploy/azure-cli
+2024-11-09T06:40:52.4333059Z ==============================================================================
+2024-11-09T06:41:01.7871913Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" --version"
+2024-11-09T06:41:04.0339686Z azure-cli                         2.65.0
+2024-11-09T06:41:04.0340361Z 
+2024-11-09T06:41:04.0340697Z core                              2.65.0
+2024-11-09T06:41:04.0341099Z telemetry                          1.1.0
+2024-11-09T06:41:04.0341311Z 
+2024-11-09T06:41:04.0341589Z Dependencies:
+2024-11-09T06:41:04.0341950Z msal                              1.31.0
+2024-11-09T06:41:04.0342340Z azure-mgmt-resource               23.1.1
+2024-11-09T06:41:04.0342454Z 
+2024-11-09T06:41:04.0342799Z Python location 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\python.exe'
+2024-11-09T06:41:04.0343190Z Extensions directory 'C:\Users\Allow\.azure\cliextensions'
+2024-11-09T06:41:04.0343336Z 
+2024-11-09T06:41:04.0343618Z Python (Windows) 3.11.8 (tags/v3.11.8:db85d51, Feb  6 2024, 21:52:07) [MSC v.1937 32 bit (Intel)]
+2024-11-09T06:41:04.0343817Z 
+2024-11-09T06:41:04.0344039Z Legal docs and information: aka.ms/AzureCliLegal
+2024-11-09T06:41:04.0344162Z 
+2024-11-09T06:41:04.0344246Z 
+2024-11-09T06:41:04.0344485Z Your CLI is up-to-date.
+2024-11-09T06:41:04.0474915Z Setting AZURE_CONFIG_DIR env variable to: C:\agent\_work\_temp\.azclitask
+2024-11-09T06:41:04.0484641Z Setting active cloud to: AzureCloud
+2024-11-09T06:41:04.0502154Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" cloud set -n AzureCloud"
+2024-11-09T06:41:10.6961577Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" login --service-principal -u *** "--password=***" --tenant 522c5630-985e-4748-973b-b47111fe414b --allow-no-subscriptions"
+2024-11-09T06:41:14.1879237Z [
+2024-11-09T06:41:14.1880412Z   {
+2024-11-09T06:41:14.1881407Z     "cloudName": "AzureCloud",
+2024-11-09T06:41:14.1882887Z     "homeTenantId": "522c5630-985e-4748-973b-b47111fe414b",
+2024-11-09T06:41:14.1884091Z     "id": "40e22e55-8ff0-4611-b9d0-4a8db29b3460",
+2024-11-09T06:41:14.1884370Z     "isDefault": true,
+2024-11-09T06:41:14.1884632Z     "managedByTenants": [],
+2024-11-09T06:41:14.1884855Z     "name": "Azure subscription 1",
+2024-11-09T06:41:14.1885052Z     "state": "Enabled",
+2024-11-09T06:41:14.1885386Z     "tenantId": "522c5630-985e-4748-973b-b47111fe414b",
+2024-11-09T06:41:14.1885642Z     "user": {
+2024-11-09T06:41:14.1886177Z       "name": "***",
+2024-11-09T06:41:14.1886657Z       "type": "servicePrincipal"
+2024-11-09T06:41:14.1886891Z     }
+2024-11-09T06:41:14.1887076Z   }
+2024-11-09T06:41:14.1887286Z ]
+2024-11-09T06:41:14.1900993Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" account set --subscription 40e22e55-8ff0-4611-b9d0-4a8db29b3460"
+2024-11-09T06:41:16.0181555Z [command]C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\agent\_work\_temp\azureclitaskscript1731134461769.ps1'"
+2024-11-09T06:41:36.2124505Z 
+2024-11-09T06:41:36.2129933Z 
+2024-11-09T06:41:36.2131372Z ResourceGroupName : TP1
+2024-11-09T06:41:36.2133910Z Location          : eastus
+2024-11-09T06:41:36.2134404Z ProvisioningState : Succeeded
+2024-11-09T06:41:36.2134829Z Tags              : 
+2024-11-09T06:41:36.2135726Z ResourceId        : /subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/TP1
+2024-11-09T06:41:36.2136078Z 
+2024-11-09T06:41:36.3310043Z 
+2024-11-09T06:41:36.3310452Z 
+2024-11-09T06:41:36.3526868Z 
+2024-11-09T06:41:36.3935406Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" account clear"
+2024-11-09T06:41:38.5266871Z ##[section]Finishing: Créer le groupe de ressources TP1
+2024-11-09T06:41:38.5289454Z ##[section]Starting: Generate random password
+2024-11-09T06:41:38.5297165Z ==============================================================================
+2024-11-09T06:41:38.5297458Z Task         : PowerShell
+2024-11-09T06:41:38.5297605Z Description  : Run a PowerShell script on Linux, macOS, or Windows
+2024-11-09T06:41:38.5297748Z Version      : 2.247.1
+2024-11-09T06:41:38.5297847Z Author       : Microsoft Corporation
+2024-11-09T06:41:38.5297963Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/powershell
+2024-11-09T06:41:38.5298106Z ==============================================================================
+2024-11-09T06:41:39.8275989Z Generating script.
+2024-11-09T06:41:39.8871866Z ========================== Starting Command Output ===========================
+2024-11-09T06:41:39.9312651Z ##[command]"C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\agent\_work\_temp\02fd226c-13ca-4f2e-bf08-6d156690a24c.ps1'"
+2024-11-09T06:41:40.7523774Z ##[section]Finishing: Generate random password
+2024-11-09T06:41:40.7559643Z ##[section]Starting: Simuler le déploiement avec Azure CLI (WhatIf)
+2024-11-09T06:41:40.7608974Z ==============================================================================
+2024-11-09T06:41:40.7609567Z Task         : Azure CLI
+2024-11-09T06:41:40.7609812Z Description  : Run Azure CLI commands against an Azure subscription in a PowerShell Core/Shell script when running on Linux agent or PowerShell/PowerShell Core/Batch script when running on Windows agent.
+2024-11-09T06:41:40.7610247Z Version      : 2.247.3
+2024-11-09T06:41:40.7610517Z Author       : Microsoft Corporation
+2024-11-09T06:41:40.7610725Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/deploy/azure-cli
+2024-11-09T06:41:40.7610951Z ==============================================================================
+2024-11-09T06:41:41.2818792Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" --version"
+2024-11-09T06:41:43.5377027Z azure-cli                         2.65.0
+2024-11-09T06:41:43.5378335Z 
+2024-11-09T06:41:43.5379145Z core                              2.65.0
+2024-11-09T06:41:43.5379860Z telemetry                          1.1.0
+2024-11-09T06:41:43.5380214Z 
+2024-11-09T06:41:43.5380788Z Dependencies:
+2024-11-09T06:41:43.5381438Z msal                              1.31.0
+2024-11-09T06:41:43.5382443Z azure-mgmt-resource               23.1.1
+2024-11-09T06:41:43.5382806Z 
+2024-11-09T06:41:43.5385505Z Python location 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\python.exe'
+2024-11-09T06:41:43.5387909Z Extensions directory 'C:\Users\Allow\.azure\cliextensions'
+2024-11-09T06:41:43.5388457Z 
+2024-11-09T06:41:43.5390194Z Python (Windows) 3.11.8 (tags/v3.11.8:db85d51, Feb  6 2024, 21:52:07) [MSC v.1937 32 bit (Intel)]
+2024-11-09T06:41:43.5390514Z 
+2024-11-09T06:41:43.5390920Z Legal docs and information: aka.ms/AzureCliLegal
+2024-11-09T06:41:43.5391174Z 
+2024-11-09T06:41:43.5391343Z 
+2024-11-09T06:41:43.5391903Z Your CLI is up-to-date.
+2024-11-09T06:41:43.5425896Z Setting AZURE_CONFIG_DIR env variable to: C:\agent\_work\_temp\.azclitask
+2024-11-09T06:41:43.5443526Z Setting active cloud to: AzureCloud
+2024-11-09T06:41:43.5469708Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" cloud set -n AzureCloud"
+2024-11-09T06:41:44.3570749Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" login --service-principal -u *** "--password=***" --tenant 522c5630-985e-4748-973b-b47111fe414b --allow-no-subscriptions"
+2024-11-09T06:41:47.3040093Z [
+2024-11-09T06:41:47.3042278Z   {
+2024-11-09T06:41:47.3042559Z     "cloudName": "AzureCloud",
+2024-11-09T06:41:47.3043264Z     "homeTenantId": "522c5630-985e-4748-973b-b47111fe414b",
+2024-11-09T06:41:47.3043739Z     "id": "40e22e55-8ff0-4611-b9d0-4a8db29b3460",
+2024-11-09T06:41:47.3044023Z     "isDefault": true,
+2024-11-09T06:41:47.3044308Z     "managedByTenants": [],
+2024-11-09T06:41:47.3044591Z     "name": "Azure subscription 1",
+2024-11-09T06:41:47.3044861Z     "state": "Enabled",
+2024-11-09T06:41:47.3045280Z     "tenantId": "522c5630-985e-4748-973b-b47111fe414b",
+2024-11-09T06:41:47.3045481Z     "user": {
+2024-11-09T06:41:47.3046155Z       "name": "***",
+2024-11-09T06:41:47.3046403Z       "type": "servicePrincipal"
+2024-11-09T06:41:47.3046578Z     }
+2024-11-09T06:41:47.3046727Z   }
+2024-11-09T06:41:47.3046880Z ]
+2024-11-09T06:41:47.3057144Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" account set --subscription 40e22e55-8ff0-4611-b9d0-4a8db29b3460"
+2024-11-09T06:41:48.9355233Z [command]C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\agent\_work\_temp\azureclitaskscript1731134501262.ps1'"
+2024-11-09T06:41:49.4731156Z adminPassword:  n09FLeJwQqO#AOu_ az deployment group what-if --resource-group TP1 --template-file C:\agent\_work\2\s\projet-cloud\vms\azuredeploy.json --parameters adminPassword=n09FLeJwQqO#AOu_ --parameters @C:\agent\_work\2\s\projet-cloud\vms\azuredeploy.parameters.json
+2024-11-09T06:41:49.5997028Z 
+2024-11-09T06:41:49.6201881Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" account clear"
+2024-11-09T06:41:51.5278136Z ##[section]Finishing: Simuler le déploiement avec Azure CLI (WhatIf)
+2024-11-09T06:41:51.5336310Z ##[section]Starting: Créer un Key Vault dans Azure et ajouter le mot de passe avec rôle temporaire "Owner"
+2024-11-09T06:41:51.5351417Z ==============================================================================
+2024-11-09T06:41:51.5352024Z Task         : Azure CLI
+2024-11-09T06:41:51.5352283Z Description  : Run Azure CLI commands against an Azure subscription in a PowerShell Core/Shell script when running on Linux agent or PowerShell/PowerShell Core/Batch script when running on Windows agent.
+2024-11-09T06:41:51.5352701Z Version      : 2.247.3
+2024-11-09T06:41:51.5352867Z Author       : Microsoft Corporation
+2024-11-09T06:41:51.5353074Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/deploy/azure-cli
+2024-11-09T06:41:51.5353373Z ==============================================================================
+2024-11-09T06:41:52.0624996Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" --version"
+2024-11-09T06:41:54.0729266Z azure-cli                         2.65.0
+2024-11-09T06:41:54.0731971Z 
+2024-11-09T06:41:54.0732831Z core                              2.65.0
+2024-11-09T06:41:54.0733490Z telemetry                          1.1.0
+2024-11-09T06:41:54.0733867Z 
+2024-11-09T06:41:54.0734533Z Dependencies:
+2024-11-09T06:41:54.0735234Z msal                              1.31.0
+2024-11-09T06:41:54.0737092Z azure-mgmt-resource               23.1.1
+2024-11-09T06:41:54.0738009Z 
+2024-11-09T06:41:54.0739426Z Python location 'C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\python.exe'
+2024-11-09T06:41:54.0740397Z Extensions directory 'C:\Users\Allow\.azure\cliextensions'
+2024-11-09T06:41:54.0740667Z 
+2024-11-09T06:41:54.0741141Z Python (Windows) 3.11.8 (tags/v3.11.8:db85d51, Feb  6 2024, 21:52:07) [MSC v.1937 32 bit (Intel)]
+2024-11-09T06:41:54.0741485Z 
+2024-11-09T06:41:54.0741878Z Legal docs and information: aka.ms/AzureCliLegal
+2024-11-09T06:41:54.0742068Z 
+2024-11-09T06:41:54.0742216Z 
+2024-11-09T06:41:54.0742615Z Your CLI is up-to-date.
+2024-11-09T06:41:54.0777700Z Setting AZURE_CONFIG_DIR env variable to: C:\agent\_work\_temp\.azclitask
+2024-11-09T06:41:54.0798143Z Setting active cloud to: AzureCloud
+2024-11-09T06:41:54.0820892Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" cloud set -n AzureCloud"
+2024-11-09T06:41:54.8285629Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" login --service-principal -u *** "--password=***" --tenant 522c5630-985e-4748-973b-b47111fe414b --allow-no-subscriptions"
+2024-11-09T06:41:57.6965230Z [
+2024-11-09T06:41:57.6966718Z   {
+2024-11-09T06:41:57.6969852Z     "cloudName": "AzureCloud",
+2024-11-09T06:41:57.6971035Z     "homeTenantId": "522c5630-985e-4748-973b-b47111fe414b",
+2024-11-09T06:41:57.6971751Z     "id": "40e22e55-8ff0-4611-b9d0-4a8db29b3460",
+2024-11-09T06:41:57.6972186Z     "isDefault": true,
+2024-11-09T06:41:57.6972567Z     "managedByTenants": [],
+2024-11-09T06:41:57.6976503Z     "name": "Azure subscription 1",
+2024-11-09T06:41:57.6978176Z     "state": "Enabled",
+2024-11-09T06:41:57.6979774Z     "tenantId": "522c5630-985e-4748-973b-b47111fe414b",
+2024-11-09T06:41:57.6980949Z     "user": {
+2024-11-09T06:41:57.6981803Z       "name": "***",
+2024-11-09T06:41:57.6983030Z       "type": "servicePrincipal"
+2024-11-09T06:41:57.6983370Z     }
+2024-11-09T06:41:57.6983607Z   }
+2024-11-09T06:41:57.6983823Z ]
+2024-11-09T06:41:57.6991727Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" account set --subscription 40e22e55-8ff0-4611-b9d0-4a8db29b3460"
+2024-11-09T06:41:59.3296605Z [command]C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\agent\_work\_temp\azureclitaskscript1731134512047.ps1'"
+2024-11-09T06:42:00.3773352Z WARNING: Command group 'config' is experimental and under development. Reference and support levels: https://aka.ms/CLI_refstatus
+2024-11-09T06:52:10.0794713Z INFO: Command ran in 609.297 seconds (init: 0.551, invoke: 608.746)
+2024-11-09T06:52:13.0297814Z INFO: Command ran in 2.647 seconds (init: 0.444, invoke: 2.203)
+2024-11-09T06:52:13.1780461Z {
+2024-11-09T06:52:13.1781817Z   "id": "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/newKeyVaultRG",
+2024-11-09T06:52:13.1782363Z   "location": "eastus",
+2024-11-09T06:52:13.1782737Z   "managedBy": null,
+2024-11-09T06:52:13.1783095Z   "name": "newKeyVaultRG",
+2024-11-09T06:52:13.1783458Z   "properties": {
+2024-11-09T06:52:13.1783823Z     "provisioningState": "Succeeded"
+2024-11-09T06:52:13.1786945Z   },
+2024-11-09T06:52:13.1789019Z   "tags": null,
+2024-11-09T06:52:13.1790451Z   "type": "Microsoft.Resources/resourceGroups"
+2024-11-09T06:52:13.1791913Z }
+2024-11-09T06:52:48.4785787Z INFO: Command ran in 35.113 seconds (init: 0.482, invoke: 34.631)
+2024-11-09T06:52:48.6158761Z {
+2024-11-09T06:52:48.6160322Z   "id": "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/newKeyVaultRG/providers/Microsoft.KeyVault/vaults/TP1CloudKeyVault123",
+2024-11-09T06:52:48.6161194Z   "location": "EastUS",
+2024-11-09T06:52:48.6161579Z   "name": "TP1CloudKeyVault123",
+2024-11-09T06:52:48.6161929Z   "properties": {
+2024-11-09T06:52:48.6162305Z     "accessPolicies": [],
+2024-11-09T06:52:48.6165699Z     "createMode": null,
+2024-11-09T06:52:48.6166379Z     "enablePurgeProtection": null,
+2024-11-09T06:52:48.6166811Z     "enableRbacAuthorization": true,
+2024-11-09T06:52:48.6167203Z     "enableSoftDelete": true,
+2024-11-09T06:52:48.6167580Z     "enabledForDeployment": false,
+2024-11-09T06:52:48.6167966Z     "enabledForDiskEncryption": null,
+2024-11-09T06:52:48.6168388Z     "enabledForTemplateDeployment": null,
+2024-11-09T06:52:48.6168749Z     "hsmPoolResourceId": null,
+2024-11-09T06:52:48.6169083Z     "networkAcls": null,
+2024-11-09T06:52:48.6169451Z     "privateEndpointConnections": null,
+2024-11-09T06:52:48.6169825Z     "provisioningState": "Succeeded",
+2024-11-09T06:52:48.6170208Z     "publicNetworkAccess": "Enabled",
+2024-11-09T06:52:48.6170568Z     "sku": {
+2024-11-09T06:52:48.6170846Z       "family": "A",
+2024-11-09T06:52:48.6171169Z       "name": "standard"
+2024-11-09T06:52:48.6171501Z     },
+2024-11-09T06:52:48.6171896Z     "softDeleteRetentionInDays": 90,
+2024-11-09T06:52:48.6172760Z     "tenantId": "522c5630-985e-4748-973b-b47111fe414b",
+2024-11-09T06:52:48.6173245Z     "vaultUri": "https://tp1cloudkeyvault123.vault.azure.net/"
+2024-11-09T06:52:48.6173521Z   },
+2024-11-09T06:52:48.6173777Z   "resourceGroup": "newKeyVaultRG",
+2024-11-09T06:52:48.6174028Z   "systemData": {
+2024-11-09T06:52:48.6174441Z     "createdAt": "2024-11-09T06:52:36.478000+00:00",
+2024-11-09T06:52:48.6174933Z     "createdBy": "***",
+2024-11-09T06:52:48.6175192Z     "createdByType": "Application",
+2024-11-09T06:52:48.6175597Z     "lastModifiedAt": "2024-11-09T06:52:36.478000+00:00",
+2024-11-09T06:52:48.6176039Z     "lastModifiedBy": "***",
+2024-11-09T06:52:48.6176270Z     "lastModifiedByType": "Application"
+2024-11-09T06:52:48.6176464Z   },
+2024-11-09T06:52:48.6176628Z   "tags": {},
+2024-11-09T06:52:48.6176863Z   "type": "Microsoft.KeyVault/vaults"
+2024-11-09T06:52:48.6177235Z }
+2024-11-09T06:54:52.4705776Z INFO: Command ran in 3.479 seconds (init: 0.636, invoke: 2.843)
+2024-11-09T06:54:52.5797168Z {
+2024-11-09T06:54:52.5799069Z   "condition": null,
+2024-11-09T06:54:52.5800086Z   "conditionVersion": null,
+2024-11-09T06:54:52.5800692Z   "createdBy": null,
+2024-11-09T06:54:52.5802659Z   "createdOn": "2024-11-09T06:55:11.761379+00:00",
+2024-11-09T06:54:52.5803416Z   "delegatedManagedIdentityResourceId": null,
+2024-11-09T06:54:52.5804016Z   "description": null,
+2024-11-09T06:54:52.5805729Z   "id": "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/newKeyVaultRG/providers/Microsoft.Authorization/roleAssignments/30db141f-d41d-4e92-b9d2-9ef646058df5",
+2024-11-09T06:54:52.5808573Z   "name": "30db141f-d41d-4e92-b9d2-9ef646058df5",
+2024-11-09T06:54:52.5810011Z   "principalId": "c54b9be8-4efe-40dc-8181-0f3c9325aecf",
+2024-11-09T06:54:52.5811080Z   "principalType": "ServicePrincipal",
+2024-11-09T06:54:52.5811822Z   "resourceGroup": "newKeyVaultRG",
+2024-11-09T06:54:52.5812793Z   "roleDefinitionId": "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635",
+2024-11-09T06:54:52.5813864Z   "scope": "/subscriptions/40e22e55-8ff0-4611-b9d0-4a8db29b3460/resourceGroups/newKeyVaultRG",
+2024-11-09T06:54:52.5814400Z   "type": "Microsoft.Authorization/roleAssignments",
+2024-11-09T06:54:52.5814973Z   "updatedBy": "f4614915-48dc-4bdf-a0ef-1ec63fa90bd9",
+2024-11-09T06:54:52.5815724Z   "updatedOn": "2024-11-09T06:55:12.682404+00:00"
+2024-11-09T06:54:52.5816175Z }
+2024-11-09T06:54:54.3224788Z ERROR: usage error: --assignee-object-id GUID --assignee-principal-type TYPE
+2024-11-09T06:54:54.3235902Z INFO: Command ran in 1.560 seconds (init: 0.467, invoke: 1.093)
+2024-11-09T06:54:57.1884090Z INFO: Request URL: 'https://graph.microsoft.com/v1.0/servicePrincipals?$filter=servicePrincipalNames%2Fany%28c%3Ac%20eq%20%27c54b9be8-4efe-40dc-8181-0f3c9325aecf%27%29'
+2024-11-09T06:54:57.1888392Z INFO: Request method: 'GET'
+2024-11-09T06:54:57.1889469Z INFO: Request headers:
+2024-11-09T06:54:57.1891367Z INFO:     'User-Agent': 'python/3.11.8 (Windows-10-10.0.22631-SP0) AZURECLI/2.65.0 (MSI) VSTS_8aa3e1a0-ee12-4ae9-ac6b-7dd300437231_build_2_0'
+2024-11-09T06:54:57.1892412Z INFO:     'Accept-Encoding': 'gzip, deflate'
+2024-11-09T06:54:57.1893112Z INFO:     'Accept': '*/*'
+2024-11-09T06:54:57.1893840Z INFO:     'Connection': 'keep-alive'
+2024-11-09T06:54:57.1894859Z INFO:     'x-ms-client-request-id': 'ab433c82-1471-4ec9-a1f7-c68f899792fd'
+2024-11-09T06:54:57.1895752Z INFO:     'CommandName': 'role assignment list'
+2024-11-09T06:54:57.1896706Z INFO:     'ParameterSetName': '--assignee --scope --query -o --verbose'
+2024-11-09T06:54:57.1897813Z INFO:     'Authorization': 'Bearer ***
+2024-11-09T06:54:57.1898445Z INFO: Request body:
+2024-11-09T06:54:57.1899004Z INFO: None
+2024-11-09T06:54:57.9960888Z INFO: Response status: 200
+2024-11-09T06:54:57.9962770Z INFO: Response headers:
+2024-11-09T06:54:57.9964103Z INFO:     'Cache-Control': 'no-cache'
+2024-11-09T06:54:57.9965058Z INFO:     'Transfer-Encoding': 'chunked'
+2024-11-09T06:54:57.9966985Z INFO:     'Content-Type': 'application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8'
+2024-11-09T06:54:57.9968149Z INFO:     'Content-Encoding': 'gzip'
+2024-11-09T06:54:57.9969158Z INFO:     'Vary': 'Accept-Encoding'
+2024-11-09T06:54:57.9970533Z INFO:     'Strict-Transport-Security': 'max-age=31536000'
+2024-11-09T06:54:57.9971653Z INFO:     'request-id': '9c54c56c-608e-4691-ad5b-bfc24d6a2e16'
+2024-11-09T06:54:57.9972504Z INFO:     'client-request-id': '9c54c56c-608e-4691-ad5b-bfc24d6a2e16'
+2024-11-09T06:54:57.9973736Z INFO:     'x-ms-ags-diagnostic': '{"ServerInfo":{"DataCenter":"Canada Central","Slice":"E","Ring":"3","ScaleUnit":"001","RoleInstance":"YT1PEPF00001AC4"}}'
+2024-11-09T06:54:57.9974693Z INFO:     'x-ms-resource-unit': '1'
+2024-11-09T06:54:57.9975358Z INFO:     'OData-Version': '4.0'
+2024-11-09T06:54:57.9976115Z INFO:     'Date': 'Sat, 09 Nov 2024 06:55:18 GMT'
+2024-11-09T06:54:57.9976633Z INFO: Response content:
+2024-11-09T06:54:57.9977225Z INFO: {"@odata.context":"https://graph.microsoft.com/v1.0/$metadata#servicePrincipals","value":[]}
+2024-11-09T06:54:58.0041436Z INFO: Request URL: 'https://graph.microsoft.com/v1.0/directoryObjects/getByIds'
+2024-11-09T06:54:58.0043506Z INFO: Request method: 'POST'
+2024-11-09T06:54:58.0044239Z INFO: Request headers:
+2024-11-09T06:54:58.0045590Z INFO:     'User-Agent': 'python/3.11.8 (Windows-10-10.0.22631-SP0) AZURECLI/2.65.0 (MSI) VSTS_8aa3e1a0-ee12-4ae9-ac6b-7dd300437231_build_2_0'
+2024-11-09T06:54:58.0046669Z INFO:     'Accept-Encoding': 'gzip, deflate'
+2024-11-09T06:54:58.0047840Z INFO:     'Accept': '*/*'
+2024-11-09T06:54:58.0048699Z INFO:     'Connection': 'keep-alive'
+2024-11-09T06:54:58.0050574Z INFO:     'x-ms-client-request-id': '083e5e77-4f3e-4c61-92c0-3dc3598dc148'
+2024-11-09T06:54:58.0051576Z INFO:     'Content-Type': 'application/json'
+2024-11-09T06:54:58.0052542Z INFO:     'CommandName': 'role assignment list'
+2024-11-09T06:54:58.0053231Z INFO:     'ParameterSetName': '--assignee --scope --query -o --verbose'
+2024-11-09T06:54:58.0054089Z INFO:     'Authorization': 'Bearer ***
+2024-11-09T06:54:58.0054604Z INFO:     'Content-Length': '132'
+2024-11-09T06:54:58.0054983Z INFO: Request body:
+2024-11-09T06:54:58.0055762Z INFO: {"ids": ["c54b9be8-4efe-40dc-8181-0f3c9325aecf"], "types": ["user", "group", "servicePrincipal", "directoryObjectPartnerReference"]}
+2024-11-09T06:54:58.6981162Z INFO: Response status: 403
+2024-11-09T06:54:58.6982104Z INFO: Response headers:
+2024-11-09T06:54:58.6983349Z INFO:     'Cache-Control': 'no-cache'
+2024-11-09T06:54:58.6984178Z INFO:     'Transfer-Encoding': 'chunked'
+2024-11-09T06:54:58.6985581Z INFO:     'Content-Type': 'application/json'
+2024-11-09T06:54:58.6986302Z INFO:     'Content-Encoding': 'gzip'
+2024-11-09T06:54:58.6986937Z INFO:     'Vary': 'Accept-Encoding'
+2024-11-09T06:54:58.6987690Z INFO:     'Strict-Transport-Security': 'max-age=31536000'
+2024-11-09T06:54:58.6988508Z INFO:     'request-id': 'fde5590d-64a7-40ff-a149-702a6e1a1bbc'
+2024-11-09T06:54:58.6989474Z INFO:     'client-request-id': 'fde5590d-64a7-40ff-a149-702a6e1a1bbc'
+2024-11-09T06:54:58.6990589Z INFO:     'x-ms-ags-diagnostic': '{"ServerInfo":{"DataCenter":"Canada Central","Slice":"E","Ring":"3","ScaleUnit":"001","RoleInstance":"YT1PEPF00001A6F"}}'
+2024-11-09T06:54:58.6991412Z INFO:     'x-ms-resource-unit': '3'
+2024-11-09T06:54:58.6992108Z INFO:     'Date': 'Sat, 09 Nov 2024 06:55:18 GMT'
+2024-11-09T06:54:58.6992582Z INFO: Response content:
+2024-11-09T06:54:58.6993945Z INFO: {"error":{"code":"Authorization_RequestDenied","message":"Insufficient privileges to complete the operation.","innerError":{"date":"2024-11-09T06:55:19","request-id":"fde5590d-64a7-40ff-a149-702a6e1a1bbc","client-request-id":"fde5590d-64a7-40ff-a149-702a6e1a1bbc"}}}
+2024-11-09T06:54:58.7034707Z WARNING: Failed to query c54b9be8-4efe-40dc-8181-0f3c9325aecf by invoking Graph API. If you don't have permission to query Graph API, please specify --assignee-object-id and --assignee-principal-type.
+2024-11-09T06:54:58.7035755Z WARNING: Assuming c54b9be8-4efe-40dc-8181-0f3c9325aecf as an object ID.
+2024-11-09T06:54:59.4284231Z INFO: Request URL: 'https://graph.microsoft.com/v1.0/directoryObjects/getByIds'
+2024-11-09T06:54:59.4285505Z INFO: Request method: 'POST'
+2024-11-09T06:54:59.4285918Z INFO: Request headers:
+2024-11-09T06:54:59.4286782Z INFO:     'User-Agent': 'python/3.11.8 (Windows-10-10.0.22631-SP0) AZURECLI/2.65.0 (MSI) VSTS_8aa3e1a0-ee12-4ae9-ac6b-7dd300437231_build_2_0'
+2024-11-09T06:54:59.4287366Z INFO:     'Accept-Encoding': 'gzip, deflate'
+2024-11-09T06:54:59.4287795Z INFO:     'Accept': '*/*'
+2024-11-09T06:54:59.4288273Z INFO:     'Connection': 'keep-alive'
+2024-11-09T06:54:59.4288881Z INFO:     'x-ms-client-request-id': '0dbdd6a5-b699-4104-832b-927d44e62095'
+2024-11-09T06:54:59.4289426Z INFO:     'Content-Type': 'application/json'
+2024-11-09T06:54:59.4289869Z INFO:     'CommandName': 'role assignment list'
+2024-11-09T06:54:59.4290201Z INFO:     'ParameterSetName': '--assignee --scope --query -o --verbose'
+2024-11-09T06:54:59.4290789Z INFO:     'Authorization': 'Bearer ***
+2024-11-09T06:54:59.4291204Z INFO:     'Content-Length': '132'
+2024-11-09T06:54:59.4291399Z INFO: Request body:
+2024-11-09T06:54:59.4291856Z INFO: {"ids": ["c54b9be8-4efe-40dc-8181-0f3c9325aecf"], "types": ["user", "group", "servicePrincipal", "directoryObjectPartnerReference"]}
+2024-11-09T06:55:00.1453487Z INFO: Response status: 403
+2024-11-09T06:55:00.1454683Z INFO: Response headers:
+2024-11-09T06:55:00.1455488Z INFO:     'Cache-Control': 'no-cache'
+2024-11-09T06:55:00.1456392Z INFO:     'Transfer-Encoding': 'chunked'
+2024-11-09T06:55:00.1456955Z INFO:     'Content-Type': 'application/json'
+2024-11-09T06:55:00.1457504Z INFO:     'Content-Encoding': 'gzip'
+2024-11-09T06:55:00.1458043Z INFO:     'Vary': 'Accept-Encoding'
+2024-11-09T06:55:00.1458601Z INFO:     'Strict-Transport-Security': 'max-age=31536000'
+2024-11-09T06:55:00.1459219Z INFO:     'request-id': 'bc4d9cb1-c5e4-4eb1-a288-de9eed281b63'
+2024-11-09T06:55:00.1460025Z INFO:     'client-request-id': 'bc4d9cb1-c5e4-4eb1-a288-de9eed281b63'
+2024-11-09T06:55:00.1460867Z INFO:     'x-ms-ags-diagnostic': '{"ServerInfo":{"DataCenter":"Canada Central","Slice":"E","Ring":"3","ScaleUnit":"001","RoleInstance":"YT1PEPF00001A71"}}'
+2024-11-09T06:55:00.1461523Z INFO:     'x-ms-resource-unit': '3'
+2024-11-09T06:55:00.1462113Z INFO:     'Date': 'Sat, 09 Nov 2024 06:55:20 GMT'
+2024-11-09T06:55:00.1462526Z INFO: Response content:
+2024-11-09T06:55:00.1463663Z INFO: {"error":{"code":"Authorization_RequestDenied","message":"Insufficient privileges to complete the operation.","innerError":{"date":"2024-11-09T06:55:20","request-id":"bc4d9cb1-c5e4-4eb1-a288-de9eed281b63","client-request-id":"bc4d9cb1-c5e4-4eb1-a288-de9eed281b63"}}}
+2024-11-09T06:55:00.1465746Z INFO: Failed to resolve graph object information per error 'Insufficient privileges to complete the operation.'
+2024-11-09T06:55:00.1472015Z INFO: Command ran in 5.515 seconds (init: 0.411, invoke: 5.104)
+2024-11-09T06:55:02.2991671Z ERROR: argument --value: expected one argument
+2024-11-09T06:55:02.2992761Z 
+2024-11-09T06:55:02.2993610Z Examples from AI knowledge base:
+2024-11-09T06:55:02.2994389Z az keyvault secret set --name MySecret --value {value} --vault-name MyKeyVault
+2024-11-09T06:55:02.2995015Z Create a secret (if one doesn't exist) or update a secret in a KeyVault. (autogenerated)
+2024-11-09T06:55:02.2995225Z 
+2024-11-09T06:55:02.2995869Z az keyvault secret set --description {description} --name MySecret --value {value} --vault-name MyKeyVault
+2024-11-09T06:55:02.2996609Z Create a secret (if one doesn't exist) or update a secret in a KeyVault. (autogenerated)
+2024-11-09T06:55:02.2996925Z 
+2024-11-09T06:55:02.2997454Z https://docs.microsoft.com/en-US/cli/azure/keyvault/secret#az_keyvault_secret_set
+2024-11-09T06:55:02.2997954Z Read more about the command in reference docs
+2024-11-09T06:55:02.2998445Z INFO: Command ran in 1.835 seconds (init: 0.447, invoke: 1.389)
+2024-11-09T06:55:04.2136170Z ERROR: unrecognized arguments: --assignee-object-id c54b9be8-4efe-40dc-8181-0f3c9325aecf
+2024-11-09T06:55:04.2140878Z 
+2024-11-09T06:55:04.2141214Z Examples from AI knowledge base:
+2024-11-09T06:55:04.2142000Z az role assignment delete --ids {ids}
+2024-11-09T06:55:04.2142536Z Delete role assignments. (autogenerated)
+2024-11-09T06:55:04.2142762Z 
+2024-11-09T06:55:04.2143505Z az role assignment delete --assignee 00000000-0000-0000-0000-000000000000 --role "Storage Account Key Operator Service Role"
+2024-11-09T06:55:04.2144028Z Delete role assignments. (autogenerated)
+2024-11-09T06:55:04.2144271Z 
+2024-11-09T06:55:04.2144879Z https://docs.microsoft.com/en-US/cli/azure/role/assignment#az_role_assignment_delete
+2024-11-09T06:55:04.2145393Z Read more about the command in reference docs
+2024-11-09T06:55:04.2183206Z INFO: Command ran in 1.609 seconds (init: 0.428, invoke: 1.181)
+2024-11-09T06:55:06.1873724Z INFO: Request URL: 'https://graph.microsoft.com/v1.0/servicePrincipals?$filter=servicePrincipalNames%2Fany%28c%3Ac%20eq%20%27c54b9be8-4efe-40dc-8181-0f3c9325aecf%27%29'
+2024-11-09T06:55:06.1875487Z INFO: Request method: 'GET'
+2024-11-09T06:55:06.1876342Z INFO: Request headers:
+2024-11-09T06:55:06.1878187Z INFO:     'User-Agent': 'python/3.11.8 (Windows-10-10.0.22631-SP0) AZURECLI/2.65.0 (MSI) VSTS_8aa3e1a0-ee12-4ae9-ac6b-7dd300437231_build_2_0'
+2024-11-09T06:55:06.1879754Z INFO:     'Accept-Encoding': 'gzip, deflate'
+2024-11-09T06:55:06.1880280Z INFO:     'Accept': '*/*'
+2024-11-09T06:55:06.1880750Z INFO:     'Connection': 'keep-alive'
+2024-11-09T06:55:06.1882254Z INFO:     'x-ms-client-request-id': '7761b52a-c52a-4eab-b1af-365d02e5cefb'
+2024-11-09T06:55:06.1882857Z INFO:     'CommandName': 'role assignment delete'
+2024-11-09T06:55:06.1883373Z INFO:     'ParameterSetName': '--role --assignee --scope --verbose'
+2024-11-09T06:55:06.1884043Z INFO:     'Authorization': 'Bearer ***
+2024-11-09T06:55:06.1884378Z INFO: Request body:
+2024-11-09T06:55:06.1884677Z INFO: None
+2024-11-09T06:55:07.0093467Z INFO: Response status: 200
+2024-11-09T06:55:07.0094371Z INFO: Response headers:
+2024-11-09T06:55:07.0095189Z INFO:     'Cache-Control': 'no-cache'
+2024-11-09T06:55:07.0095826Z INFO:     'Transfer-Encoding': 'chunked'
+2024-11-09T06:55:07.0096786Z INFO:     'Content-Type': 'application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8'
+2024-11-09T06:55:07.0097876Z INFO:     'Content-Encoding': 'gzip'
+2024-11-09T06:55:07.0098733Z INFO:     'Vary': 'Accept-Encoding'
+2024-11-09T06:55:07.0101098Z INFO:     'Strict-Transport-Security': 'max-age=31536000'
+2024-11-09T06:55:07.0102337Z INFO:     'request-id': '14342b65-563e-4fbb-a330-08384e623657'
+2024-11-09T06:55:07.0103498Z INFO:     'client-request-id': '14342b65-563e-4fbb-a330-08384e623657'
+2024-11-09T06:55:07.0104323Z INFO:     'x-ms-ags-diagnostic': '{"ServerInfo":{"DataCenter":"Canada Central","Slice":"E","Ring":"3","ScaleUnit":"001","RoleInstance":"YT1PEPF00001F20"}}'
+2024-11-09T06:55:07.0105001Z INFO:     'x-ms-resource-unit': '1'
+2024-11-09T06:55:07.0105530Z INFO:     'OData-Version': '4.0'
+2024-11-09T06:55:07.0106414Z INFO:     'Date': 'Sat, 09 Nov 2024 06:55:26 GMT'
+2024-11-09T06:55:07.0106863Z INFO: Response content:
+2024-11-09T06:55:07.0107280Z INFO: {"@odata.context":"https://graph.microsoft.com/v1.0/$metadata#servicePrincipals","value":[]}
+2024-11-09T06:55:07.0177747Z INFO: Request URL: 'https://graph.microsoft.com/v1.0/directoryObjects/getByIds'
+2024-11-09T06:55:07.0179015Z INFO: Request method: 'POST'
+2024-11-09T06:55:07.0179547Z INFO: Request headers:
+2024-11-09T06:55:07.0180486Z INFO:     'User-Agent': 'python/3.11.8 (Windows-10-10.0.22631-SP0) AZURECLI/2.65.0 (MSI) VSTS_8aa3e1a0-ee12-4ae9-ac6b-7dd300437231_build_2_0'
+2024-11-09T06:55:07.0181434Z INFO:     'Accept-Encoding': 'gzip, deflate'
+2024-11-09T06:55:07.0182331Z INFO:     'Accept': '*/*'
+2024-11-09T06:55:07.0183632Z INFO:     'Connection': 'keep-alive'
+2024-11-09T06:55:07.0185272Z INFO:     'x-ms-client-request-id': '3024651c-64f4-455b-b404-6accce0edca7'
+2024-11-09T06:55:07.0186263Z INFO:     'Content-Type': 'application/json'
+2024-11-09T06:55:07.0186783Z INFO:     'CommandName': 'role assignment delete'
+2024-11-09T06:55:07.0187306Z INFO:     'ParameterSetName': '--role --assignee --scope --verbose'
+2024-11-09T06:55:07.0187950Z INFO:     'Authorization': 'Bearer ***
+2024-11-09T06:55:07.0188432Z INFO:     'Content-Length': '132'
+2024-11-09T06:55:07.0188895Z INFO: Request body:
+2024-11-09T06:55:07.0189660Z INFO: {"ids": ["c54b9be8-4efe-40dc-8181-0f3c9325aecf"], "types": ["user", "group", "servicePrincipal", "directoryObjectPartnerReference"]}
+2024-11-09T06:55:07.7225072Z INFO: Response status: 403
+2024-11-09T06:55:07.7225720Z INFO: Response headers:
+2024-11-09T06:55:07.7226402Z INFO:     'Cache-Control': 'no-cache'
+2024-11-09T06:55:07.7226804Z INFO:     'Transfer-Encoding': 'chunked'
+2024-11-09T06:55:07.7227101Z INFO:     'Content-Type': 'application/json'
+2024-11-09T06:55:07.7227385Z INFO:     'Content-Encoding': 'gzip'
+2024-11-09T06:55:07.7227706Z INFO:     'Vary': 'Accept-Encoding'
+2024-11-09T06:55:07.7228091Z INFO:     'Strict-Transport-Security': 'max-age=31536000'
+2024-11-09T06:55:07.7228526Z INFO:     'request-id': '30633ad1-71ad-4d48-85d1-915be61e7b3f'
+2024-11-09T06:55:07.7228921Z INFO:     'client-request-id': '30633ad1-71ad-4d48-85d1-915be61e7b3f'
+2024-11-09T06:55:07.7229508Z INFO:     'x-ms-ags-diagnostic': '{"ServerInfo":{"DataCenter":"Canada Central","Slice":"E","Ring":"3","ScaleUnit":"001","RoleInstance":"YT1PEPF00001ABA"}}'
+2024-11-09T06:55:07.7229964Z INFO:     'x-ms-resource-unit': '3'
+2024-11-09T06:55:07.7231009Z INFO:     'Date': 'Sat, 09 Nov 2024 06:55:27 GMT'
+2024-11-09T06:55:07.7231964Z INFO: Response content:
+2024-11-09T06:55:07.7233294Z INFO: {"error":{"code":"Authorization_RequestDenied","message":"Insufficient privileges to complete the operation.","innerError":{"date":"2024-11-09T06:55:28","request-id":"30633ad1-71ad-4d48-85d1-915be61e7b3f","client-request-id":"30633ad1-71ad-4d48-85d1-915be61e7b3f"}}}
+2024-11-09T06:55:07.7234235Z WARNING: Failed to query c54b9be8-4efe-40dc-8181-0f3c9325aecf by invoking Graph API. If you don't have permission to query Graph API, please specify --assignee-object-id and --assignee-principal-type.
+2024-11-09T06:55:07.7234940Z WARNING: Assuming c54b9be8-4efe-40dc-8181-0f3c9325aecf as an object ID.
+2024-11-09T06:55:10.0812442Z INFO: Command ran in 5.512 seconds (init: 0.430, invoke: 5.082)
+2024-11-09T06:55:10.4426589Z 
+2024-11-09T06:55:10.4623905Z [command]C:\WINDOWS\system32\cmd.exe /D /S /C ""C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin\az.cmd" account clear"
+2024-11-09T06:55:12.2032340Z ##[section]Finishing: Créer un Key Vault dans Azure et ajouter le mot de passe avec rôle temporaire "Owner"
+2024-11-09T06:55:12.2067881Z ##[section]Starting: Encoder le contenu Cloud-Init
+2024-11-09T06:55:12.2079820Z ==============================================================================
+2024-11-09T06:55:12.2080338Z Task         : PowerShell
+2024-11-09T06:55:12.2080551Z Description  : Run a PowerShell script on Linux, macOS, or Windows
+2024-11-09T06:55:12.2080778Z Version      : 2.247.1
+2024-11-09T06:55:12.2080940Z Author       : Microsoft Corporation
+2024-11-09T06:55:12.2081124Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/powershell
+2024-11-09T06:55:12.2081352Z ==============================================================================
+2024-11-09T06:55:13.7972524Z Generating script.
+2024-11-09T06:55:13.8354798Z ========================== Starting Command Output ===========================
+2024-11-09T06:55:13.8617858Z ##[command]"C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\agent\_work\_temp\86e3aeeb-210b-4363-802f-bb75b511006d.ps1'"
+2024-11-09T06:55:14.4945769Z ##[section]Finishing: Encoder le contenu Cloud-Init
+2024-11-09T06:55:14.4975533Z ##[section]Starting: Déployer le modèle ARM avec paramètres
+2024-11-09T06:55:14.4988517Z ==============================================================================
+2024-11-09T06:55:14.4989385Z Task         : ARM template deployment
+2024-11-09T06:55:14.4989620Z Description  : Deploy an Azure Resource Manager (ARM) template to all the deployment scopes
+2024-11-09T06:55:14.4989968Z Version      : 3.247.5
+2024-11-09T06:55:14.4990254Z Author       : Microsoft Corporation
+2024-11-09T06:55:14.4990443Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/deploy/azure-resource-group-deployment
+2024-11-09T06:55:14.4990780Z ==============================================================================
+2024-11-09T06:55:15.2907404Z ARM Service Connection deployment scope - Subscription
+2024-11-09T06:55:15.3302674Z Checking if the following resource group exists: TP1.
+2024-11-09T06:55:16.4081298Z Resource group exists: true.
+2024-11-09T06:55:16.4085771Z Creating deployment parameters.
+2024-11-09T06:55:16.4203185Z The detected encoding for file 'C:\agent\_work\2\s\projet-cloud\vms\azuredeploy.json' is 'utf-8'
+2024-11-09T06:55:16.4274785Z The detected encoding for file 'C:\agent\_work\2\s\projet-cloud\vms\azuredeploy.parameters.json' is 'utf-8'
+2024-11-09T06:55:16.4374915Z (node:17800) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2024-11-09T06:55:16.4376068Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2024-11-09T06:55:17.7602714Z Starting template validation.
+2024-11-09T06:55:17.7619035Z Deployment name is azuredeploy-20241109-015517-deae
+2024-11-09T06:55:19.6031425Z Template deployment validation was completed successfully.
+2024-11-09T06:55:19.6032333Z Starting Deployment.
+2024-11-09T06:55:19.6035584Z Deployment name is azuredeploy-20241109-015517-deae
+2024-11-09T06:56:39.5844061Z Successfully deployed the template.
+2024-11-09T06:56:39.6029320Z ##[section]Finishing: Déployer le modèle ARM avec paramètres
+2024-11-09T06:56:39.6329334Z ##[section]Starting: Checkout alois-fleury/TP1-environnement-deploiement-applications@master to s
+2024-11-09T06:56:39.6340998Z ==============================================================================
+2024-11-09T06:56:39.6341723Z Task         : Get sources
+2024-11-09T06:56:39.6342157Z Description  : Get sources from a repository. Supports Git, TfsVC, and SVN repositories.
+2024-11-09T06:56:39.6342647Z Version      : 1.0.0
+2024-11-09T06:56:39.6343143Z Author       : Microsoft
+2024-11-09T06:56:39.6343529Z Help         : [More Information](https://go.microsoft.com/fwlink/?LinkId=798199)
+2024-11-09T06:56:39.6343963Z ==============================================================================
+2024-11-09T06:56:40.1328608Z Cleaning any cached credential from repository: alois-fleury/TP1-environnement-deploiement-applications (GitHub)
+2024-11-09T06:56:40.1441705Z ##[section]Finishing: Checkout alois-fleury/TP1-environnement-deploiement-applications@master to s
+2024-11-09T06:56:40.1592040Z ##[section]Starting: Finalize Job
+2024-11-09T06:56:40.1631227Z TestResultLogParser: JasmineTestResultParser : Starting jasmine test result parser.
+2024-11-09T06:56:40.1631444Z TestResultLogParser: JestTestResultParser : Starting jest test result parser.
+2024-11-09T06:56:40.1631642Z TestResultLogParser: MochaTestResultParser : Starting mocha test result parser.
+2024-11-09T06:56:40.1631839Z TestResultLogParser: PythonTestResultParser : Starting python test result parser.
+2024-11-09T06:56:40.1632131Z TestResultLogParser: PythonTestResultParser : ExpectingTestResults: transitioned to state ExpectingFailedResults at line 297
+2024-11-09T06:56:40.4256062Z TestResultLogParser: Waiting for log plugin to finish, pending process 2 log lines.
+2024-11-09T06:56:40.6985410Z Cleaning up task key
+2024-11-09T06:56:40.6987866Z Start cleaning up orphan processes.
+2024-11-09T06:56:40.7541977Z ##[section]Finishing: Finalize Job
+2024-11-09T06:56:40.7645017Z ##[section]Finishing: Job
