@@ -33,6 +33,7 @@ steps:
     scriptType: 'ps'  
     scriptLocation: 'inlineScript'
     inlineScript: |
+      Write-Host "adminPassword: $(adminPassword)" `
       az deployment group what-if `
         --resource-group TP1 `
         --template-file "$(Build.SourcesDirectory)\projet-cloud\vms\azuredeploy.json" `
